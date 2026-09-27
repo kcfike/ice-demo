@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Two-level trade and role classifications with fictional development rates."
+  },
+  "records": [
+    { "classificationId": "LAB-ICT-NET-TECH", "departmentId": "DEP-ICT", "trade": "Network and Communications", "roleLevel": "Technician", "unit": "HOUR", "standardCostRate": 68.00, "standardBillRate": 118.00, "active": true },
+    { "classificationId": "LAB-ICT-SYS-ENG", "departmentId": "DEP-ICT", "trade": "Systems and Network Support", "roleLevel": "Engineer", "unit": "HOUR", "standardCostRate": 92.00, "standardBillRate": 158.00, "active": true },
+    { "classificationId": "LAB-IND-WELD-JRN", "departmentId": "DEP-IND", "trade": "Welding", "roleLevel": "Journeyman", "unit": "HOUR", "standardCostRate": 84.00, "standardBillRate": 146.00, "active": true },
+    { "classificationId": "LAB-IND-COAT-TECH", "departmentId": "DEP-IND", "trade": "Specialty Coatings", "roleLevel": "Technician", "unit": "HOUR", "standardCostRate": 76.00, "standardBillRate": 132.00, "active": true },
+    { "classificationId": "LAB-IND-SUP", "departmentId": "DEP-IND", "trade": "Industrial Services", "roleLevel": "Supervisor", "unit": "HOUR", "standardCostRate": 105.00, "standardBillRate": 182.00, "active": true },
+    { "classificationId": "LAB-TRD-ELEC-JRN", "departmentId": "DEP-TRD", "trade": "Electrical", "roleLevel": "Journeyman", "unit": "HOUR", "standardCostRate": 86.00, "standardBillRate": 149.00, "active": true },
+    { "classificationId": "LAB-TRD-WTR-OP", "departmentId": "DEP-TRD", "trade": "Water and Wastewater", "roleLevel": "Operator", "unit": "HOUR", "standardCostRate": 73.00, "standardBillRate": 127.00, "active": true },
+    { "classificationId": "LAB-HSP-CAMP-MGR", "departmentId": "DEP-HSP", "trade": "Camp Operations", "roleLevel": "Manager", "unit": "HOUR", "standardCostRate": 67.00, "standardBillRate": 112.00, "active": true },
+    { "classificationId": "LAB-HSP-COOK-LEAD", "departmentId": "DEP-HSP", "trade": "Catering", "roleLevel": "Lead", "unit": "HOUR", "standardCostRate": 52.00, "standardBillRate": 91.00, "active": true }
+  ]
+}

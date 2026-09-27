@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Expected billing packet, reconciliation and AR outcomes for automated tests."
+  },
+  "records": [
+    {
+      "billingCaseId": "BILL-TEST-001",
+      "sowId": "SOW-2026-0001",
+      "status": "DRAFT_PACKET",
+      "periodStart": "2026-02-01",
+      "periodEnd": "2026-02-28",
+      "labor": { "straightTime": 22000.00, "overtime": 3600.00, "total": 25600.00 },
+      "materials": 40700.00,
+      "equipment": 1800.00,
+      "subcontractors": 0.00,
+      "adjustments": [],
+      "packetTotal": 68100.00,
+      "expectedOutcome": "READY_FOR_ACCOUNTING_REVIEW"
+    },
+    {
+      "billingCaseId": "BILL-TEST-002",
+      "sowId": "SOW-2026-0002",
+      "status": "BLOCKED",
+      "periodStart": "2026-02-01",
+      "periodEnd": "2026-02-28",
+      "labor": { "straightTime": 61200.00, "overtime": 8700.00, "total": 69900.00 },
+      "materials": 49090.00,
+      "equipment": 14200.00,
+      "subcontractors": 18000.00,
+      "adjustments": [],
+      "packetTotal": 151190.00,
+      "blockingExceptions": ["MISSING_SIGNED_COMPLETION", "LATE_COST_REQUIRES_RECONCILIATION"],
+      "expectedOutcome": "BLOCK_AR_HANDOFF"
+    },
+    {
+      "billingCaseId": "BILL-TEST-003",
+      "sowId": "SOW-2026-0003",
+      "status": "ON_HOLD",
+      "periodStart": "2026-02-01",
+      "periodEnd": "2026-02-28",
+      "labor": { "straightTime": 8200.00, "overtime": 0.00, "total": 8200.00 },
+      "materials": 7800.00,
+      "equipment": 1500.00,
+      "subcontractors": 0.00,
+      "adjustments": [],
+      "packetTotal": 17500.00,
+      "blockingExceptions": ["MISSING_CUSTOMER_PO", "PARTIAL_RECEIPT", "MISSING_APPROVED_ESTIMATE"],
+      "expectedOutcome": "REMAIN_ON_HOLD"
+    },
+    {
+      "billingCaseId": "BILL-TEST-004",
+      "sowId": "SOW-2026-0005",
+      "status": "REJECTED_FOR_CORRECTION",
+      "periodStart": "2026-03-01",
+      "periodEnd": "2026-03-31",
+      "labor": { "straightTime": 16120.00, "overtime": 2360.00, "total": 18480.00 },
+      "materials": 12100.00,
+      "equipment": 1800.00,
+      "subcontractors": 0.00,
+      "adjustments": [
+        { "adjustmentId": "ADJ-001", "category": "LABOR", "amount": -1180.00, "reason": "Duplicate technician line", "authorizedByEmployeeId": "EMP-1009", "status": "PENDING_SUPPORT" }
+      ],
+      "packetTotal": 31200.00,
+      "rejectionComment": "Provide support for the labor adjustment and regenerate the actuals summary.",
+      "expectedOutcome": "RETURN_TO_ACCOUNTING_REVIEW"
+    }
+  ]
+}

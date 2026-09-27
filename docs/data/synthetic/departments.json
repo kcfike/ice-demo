@@ -1,0 +1,14 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "ICE Services-aligned department reference data for development."
+  },
+  "records": [
+    { "departmentId": "DEP-ICT", "code": "ICT", "name": "Information and Communications Technology", "costCenter": "CC-210", "active": true },
+    { "departmentId": "DEP-IND", "code": "IND", "name": "Industrial Services", "costCenter": "CC-310", "active": true },
+    { "departmentId": "DEP-TRD", "code": "TRD", "name": "Trades and Utility Management", "costCenter": "CC-410", "active": true },
+    { "departmentId": "DEP-HSP", "code": "HSP", "name": "Catering and Hospitality", "costCenter": "CC-510", "active": true },
+    { "departmentId": "DEP-COR", "code": "COR", "name": "Corporate and Shared Services", "costCenter": "CC-110", "active": true },
+    { "departmentId": "DEP-LEG", "code": "LEG", "name": "Legacy Field Operations", "costCenter": "CC-999", "active": false }
+  ]
+}

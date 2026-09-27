@@ -1,0 +1,16 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "T-Sheets-like labor entries for retrieval, overtime, discipline and closeout tests."
+  },
+  "records": [
+    { "timeEntryId": "TIME-0001", "sowId": "SOW-2026-0001", "employeeId": "EMP-1001", "classificationId": "LAB-ICT-NET-TECH", "workDate": "2026-02-10", "startTimestamp": "2026-02-10T08:00:00-09:00", "endTimestamp": "2026-02-10T17:00:00-09:00", "breakMinutes": 60, "hours": 8.0, "expectedTimeType": "STRAIGHT_TIME", "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0002", "sowId": "SOW-2026-0001", "employeeId": "EMP-1002", "classificationId": "LAB-ICT-SYS-ENG", "workDate": "2026-02-10", "startTimestamp": "2026-02-10T07:30:00-09:00", "endTimestamp": "2026-02-10T18:00:00-09:00", "breakMinutes": 30, "hours": 10.0, "expectedTimeType": "MIXED_ST_OT", "expectedStraightTimeHours": 8.0, "expectedOvertimeHours": 2.0, "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0003", "sowId": "SOW-2026-0002", "employeeId": "EMP-1003", "classificationId": "LAB-IND-WELD-JRN", "workDate": "2026-02-20", "startTimestamp": "2026-02-20T06:00:00-09:00", "endTimestamp": "2026-02-20T18:30:00-09:00", "breakMinutes": 30, "hours": 12.0, "expectedTimeType": "MIXED_ST_OT", "expectedStraightTimeHours": 8.0, "expectedOvertimeHours": 4.0, "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0004", "sowId": "SOW-2026-0002", "employeeId": "EMP-1004", "classificationId": "LAB-IND-WELD-JRN", "workDate": "2026-02-20", "startTimestamp": "2026-02-20T07:00:00-09:00", "endTimestamp": "2026-02-20T17:00:00-09:00", "breakMinutes": 60, "hours": 9.0, "expectedTimeType": "EXCEPTION", "exceptionCode": "WRONG_DISCIPLINE", "expectedClassificationId": "LAB-IND-COAT-TECH", "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0005", "sowId": "SOW-2026-0003", "employeeId": "EMP-1006", "classificationId": "LAB-TRD-WTR-OP", "workDate": "2026-02-22", "startTimestamp": "2026-02-22T08:00:00-09:00", "endTimestamp": "2026-02-22T16:00:00-09:00", "breakMinutes": 0, "hours": 8.0, "expectedTimeType": "STRAIGHT_TIME", "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0006", "sowId": "SOW-2026-0005", "employeeId": "EMP-1001", "classificationId": "LAB-ICT-NET-TECH", "workDate": "2026-03-08", "startTimestamp": "2026-03-08T20:00:00-08:00", "endTimestamp": "2026-03-09T06:00:00-08:00", "breakMinutes": 0, "hours": 10.0, "expectedTimeType": "OVERNIGHT_REVIEW", "expectedStraightTimeHours": 8.0, "expectedOvertimeHours": 2.0, "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0007", "sowId": "SOW-2026-0002", "employeeId": "EMP-1003", "classificationId": "LAB-IND-WELD-JRN", "workDate": "2026-03-03", "startTimestamp": "2026-03-03T08:00:00-09:00", "endTimestamp": "2026-03-03T12:00:00-09:00", "breakMinutes": 0, "hours": 4.0, "expectedTimeType": "EXCEPTION", "exceptionCode": "LATE_COST_AFTER_CLOSEOUT_TRIGGER", "sourceStatus": "APPROVED" },
+    { "timeEntryId": "TIME-0008", "sowId": "SOW-2026-0003", "employeeId": "EMP-1010", "classificationId": "LAB-TRD-WTR-OP", "workDate": "2026-02-23", "startTimestamp": "2026-02-23T08:00:00-09:00", "endTimestamp": "2026-02-23T12:00:00-09:00", "breakMinutes": 0, "hours": 4.0, "expectedTimeType": "EXCEPTION", "exceptionCode": "INACTIVE_EMPLOYEE", "sourceStatus": "REJECTED" }
+  ]
+}

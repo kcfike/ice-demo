@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "companyContext": "ICE Services, Inc.",
+    "purpose": "Development and automated testing only. All customer names and contacts are fictional."
+  },
+  "records": [
+    {
+      "customerId": "CUST-1001",
+      "name": "Arctic Horizon Energy LLC",
+      "sector": "Oil and Gas",
+      "billingContact": { "name": "Casey Morgan", "email": "billing@arctichorizon.example.com" },
+      "billingAddress": { "city": "Anchorage", "state": "AK", "postalCode": "99501" },
+      "paymentTermsDays": 30,
+      "defaultBillingFormat": "T_AND_M_DETAIL",
+      "active": true
+    },
+    {
+      "customerId": "CUST-1002",
+      "name": "Northstar Regional Facilities Authority",
+      "sector": "Government",
+      "billingContact": { "name": "Jordan Lee", "email": "ap@northstarfacilities.example.org" },
+      "billingAddress": { "city": "Utqiagvik", "state": "AK", "postalCode": "99723" },
+      "paymentTermsDays": 45,
+      "defaultBillingFormat": "GOVERNMENT_STANDARD",
+      "active": true
+    },
+    {
+      "customerId": "CUST-1003",
+      "name": "Polar Health Network",
+      "sector": "Healthcare",
+      "billingContact": { "name": "Taylor Brooks", "email": "finance@polarhealth.example.org" },
+      "billingAddress": { "city": "Fairbanks", "state": "AK", "postalCode": "99701" },
+      "paymentTermsDays": 30,
+      "defaultBillingFormat": "FIXED_PRICE_SUMMARY",
+      "active": true
+    },
+    {
+      "customerId": "CUST-1004",
+      "name": "Tundra Logistics Cooperative",
+      "sector": "Transportation",
+      "billingContact": { "name": "Avery Chen", "email": "invoices@tundralogistics.example.com" },
+      "billingAddress": { "city": "Deadhorse", "state": "AK", "postalCode": "99734" },
+      "paymentTermsDays": 30,
+      "defaultBillingFormat": "T_AND_M_DETAIL",
+      "active": true
+    },
+    {
+      "customerId": "CUST-1005",
+      "name": "Borealis Education Consortium",
+      "sector": "Education",
+      "billingContact": { "name": "Riley Adams", "email": "accountspayable@borealisedu.example.org" },
+      "billingAddress": { "city": "Nome", "state": "AK", "postalCode": "99762" },
+      "paymentTermsDays": 45,
+      "defaultBillingFormat": "FIXED_PRICE_SUMMARY",
+      "active": false
+    }
+  ]
+}

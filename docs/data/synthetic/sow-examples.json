@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Representative SOW records spanning ICE Services business lines and workflow states."
+  },
+  "records": [
+    {
+      "sowId": "SOW-2026-0001",
+      "customerId": "CUST-1001",
+      "departmentId": "DEP-ICT",
+      "projectTypeId": "PT-TM",
+      "title": "Remote Camp Fiber Backbone Upgrade",
+      "requestDate": "2026-01-12",
+      "requester": "Field Operations",
+      "customerPoNumber": "AH-PO-44018",
+      "customerReference": "NORTH-CAMP-NET-26",
+      "scope": "Install and certify a replacement fiber backbone and supporting network equipment at a remote operations camp.",
+      "status": "ACTIVE",
+      "ownerEmployeeId": "EMP-1002",
+      "originalBudget": { "labor": 46800.00, "materials": 72500.00, "equipment": 8500.00, "subcontractors": 0.00, "total": 127800.00 },
+      "budget": { "labor": 46800.00, "materials": 84500.00, "equipment": 9500.00, "subcontractors": 0.00, "total": 140800.00 },
+      "amendments": [
+        {
+          "amendmentId": "AMD-2026-0001-01",
+          "amendmentType": "FORMAL_BUDGET_AMENDMENT",
+          "requestedDate": "2026-02-01",
+          "approvedDate": "2026-02-03",
+          "approvedBy": "Synthetic Customer Approver",
+          "reason": "Additional fiber route and weather-protection equipment approved after field verification.",
+          "budgetDelta": { "labor": 0.00, "materials": 12000.00, "equipment": 1000.00, "subcontractors": 0.00, "total": 13000.00 },
+          "status": "APPROVED"
+        }
+      ],
+      "laborBudgetLines": [
+        { "classificationId": "LAB-ICT-NET-TECH", "hours": 240, "rate": 118.00 },
+        { "classificationId": "LAB-ICT-SYS-ENG", "hours": 117, "rate": 158.00 }
+      ],
+      "testScenario": "Active T&M project with an approved formal budget amendment"
+    },
+    {
+      "sowId": "SOW-2026-0002",
+      "customerId": "CUST-1001",
+      "departmentId": "DEP-IND",
+      "projectTypeId": "PT-HARD-DOLLAR",
+      "title": "Tank Exterior Repair and Coating Campaign",
+      "requestDate": "2026-02-03",
+      "requester": "Asset Integrity",
+      "customerPoNumber": "AH-PO-44102",
+      "customerReference": "TANK-17-REPAIR",
+      "scope": "Complete localized tank repair, surface preparation and specialty coating application.",
+      "status": "READY_FOR_BILLING",
+      "ownerEmployeeId": "EMP-1003",
+      "budget": { "labor": 88000.00, "materials": 56000.00, "equipment": 18000.00, "subcontractors": 22000.00, "total": 184000.00 },
+      "laborBudgetLines": [
+        { "classificationId": "LAB-IND-WELD-JRN", "hours": 320, "rate": 146.00 },
+        { "classificationId": "LAB-IND-COAT-TECH", "hours": 260, "rate": 132.00 },
+        { "classificationId": "LAB-IND-SUP", "hours": 36, "rate": 182.00 }
+      ],
+      "testScenario": "Ready for billing but missing a required signed completion document"
+    },
+    {
+      "sowId": "SOW-2026-0003",
+      "customerId": "CUST-1002",
+      "departmentId": "DEP-TRD",
+      "projectTypeId": "PT-OMR",
+      "title": "Water Treatment Pump Emergency Repair",
+      "requestDate": "2026-02-18",
+      "requester": "Utility Operations",
+      "customerPoNumber": null,
+      "customerReference": "WT-PUMP-03",
+      "scope": "Diagnose and repair a failed process pump supporting a remote water treatment system.",
+      "status": "ON_HOLD",
+      "holdReasonCode": "MISSING_CUSTOMER_PO",
+      "expectedResolutionDate": "2026-03-05",
+      "ownerEmployeeId": "EMP-1006",
+      "budget": { "labor": 24000.00, "materials": 18500.00, "equipment": 6000.00, "subcontractors": 0.00, "total": 48500.00 },
+      "laborBudgetLines": [
+        { "classificationId": "LAB-TRD-WTR-OP", "hours": 120, "rate": 127.00 },
+        { "classificationId": "LAB-TRD-ELEC-JRN", "hours": 48, "rate": 149.00 }
+      ],
+      "testScenario": "Hold and resume workflow caused by missing customer PO"
+    },
+    {
+      "sowId": "SOW-2026-0004",
+      "customerId": "CUST-1004",
+      "departmentId": "DEP-HSP",
+      "projectTypeId": "PT-CAMP",
+      "title": "Winter Mobile Camp Mobilization",
+      "requestDate": "2026-03-01",
+      "requester": "Logistics Program Office",
+      "customerPoNumber": "TLC-260119",
+      "customerReference": "WINTER-CAMP-40",
+      "scope": "Mobilize and operate a temporary 40-person remote camp with lodging, catering and facility support.",
+      "status": "DRAFT",
+      "ownerEmployeeId": "EMP-1007",
+      "budget": { "labor": 132000.00, "materials": 78000.00, "equipment": 96000.00, "subcontractors": 42000.00, "total": 348000.00 },
+      "laborBudgetLines": [
+        { "classificationId": "LAB-HSP-CAMP-MGR", "hours": 720, "rate": 112.00 },
+        { "classificationId": "LAB-HSP-COOK-LEAD", "hours": 560, "rate": 91.00 }
+      ],
+      "testScenario": "Draft SOW awaiting pre-job obligations"
+    },
+    {
+      "sowId": "SOW-2026-0005",
+      "customerId": "CUST-1003",
+      "departmentId": "DEP-ICT",
+      "projectTypeId": "PT-TM",
+      "title": "Clinic Network Outage Response",
+      "requestDate": "2026-03-08",
+      "requester": "Clinical Operations",
+      "customerPoNumber": "PHN-EM-8821",
+      "customerReference": "CLINIC-NET-OUTAGE",
+      "scope": "Restore network connectivity and replace failed edge equipment at a regional clinic.",
+      "status": "BILLING_IN_REVIEW",
+      "ownerEmployeeId": "EMP-1001",
+      "budget": { "labor": 18000.00, "materials": 14500.00, "equipment": 2500.00, "subcontractors": 0.00, "total": 35000.00 },
+      "laborBudgetLines": [
+        { "classificationId": "LAB-ICT-NET-TECH", "hours": 80, "rate": 118.00 },
+        { "classificationId": "LAB-ICT-SYS-ENG", "hours": 42, "rate": 158.00 }
+      ],
+      "testScenario": "Overnight emergency labor and rejected billing adjustment"
+    }
+  ]
+}

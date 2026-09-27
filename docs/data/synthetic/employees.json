@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Fictional employee master data. Names and email addresses do not represent ICE Services employees."
+  },
+  "records": [
+    { "employeeId": "EMP-1001", "firstName": "Morgan", "lastName": "Reed", "email": "morgan.reed@example.com", "departmentId": "DEP-ICT", "jobTitle": "Network Technician", "homeLocation": "Anchorage", "active": true },
+    { "employeeId": "EMP-1002", "firstName": "Jamie", "lastName": "Park", "email": "jamie.park@example.com", "departmentId": "DEP-ICT", "jobTitle": "Systems Engineer", "homeLocation": "Anchorage", "active": true },
+    { "employeeId": "EMP-1003", "firstName": "Alex", "lastName": "Stone", "email": "alex.stone@example.com", "departmentId": "DEP-IND", "jobTitle": "Welder", "homeLocation": "Prudhoe Bay", "active": true },
+    { "employeeId": "EMP-1004", "firstName": "Sam", "lastName": "Rivera", "email": "sam.rivera@example.com", "departmentId": "DEP-IND", "jobTitle": "Coatings Technician", "homeLocation": "Prudhoe Bay", "active": true },
+    { "employeeId": "EMP-1005", "firstName": "Jordan", "lastName": "Kim", "email": "jordan.kim@example.com", "departmentId": "DEP-TRD", "jobTitle": "Electrician", "homeLocation": "Deadhorse", "active": true },
+    { "employeeId": "EMP-1006", "firstName": "Taylor", "lastName": "Nguyen", "email": "taylor.nguyen@example.com", "departmentId": "DEP-TRD", "jobTitle": "Water Treatment Operator", "homeLocation": "Deadhorse", "active": true },
+    { "employeeId": "EMP-1007", "firstName": "Casey", "lastName": "Morgan", "email": "casey.morgan@example.com", "departmentId": "DEP-HSP", "jobTitle": "Camp Manager", "homeLocation": "Prudhoe Bay", "active": true },
+    { "employeeId": "EMP-1008", "firstName": "Robin", "lastName": "Ellis", "email": "robin.ellis@example.com", "departmentId": "DEP-HSP", "jobTitle": "Lead Cook", "homeLocation": "Prudhoe Bay", "active": true },
+    { "employeeId": "EMP-1009", "firstName": "Drew", "lastName": "Patel", "email": "drew.patel@example.com", "departmentId": "DEP-COR", "jobTitle": "Operations Accountant", "homeLocation": "Anchorage", "active": true },
+    { "employeeId": "EMP-1010", "firstName": "Avery", "lastName": "Cole", "email": "avery.cole@example.com", "departmentId": "DEP-TRD", "jobTitle": "Utility Technician", "homeLocation": "Deadhorse", "active": false },
+    { "employeeId": "EMP-1011", "firstName": "Morgan", "lastName": "Reed", "email": "morgan.reed.industrial@example.com", "departmentId": "DEP-IND", "jobTitle": "Industrial Technician", "homeLocation": "Prudhoe Bay", "active": true }
+  ],
+  "expectedDataQualityExceptions": [
+    {
+      "exceptionCode": "DUPLICATE_EMPLOYEE_NAME",
+      "employeeIds": ["EMP-1001", "EMP-1011"],
+      "duplicateName": "Morgan Reed",
+      "expectedResult": "MATCH_BY_EMPLOYEE_ID_NOT_NAME"
+    },
+    {
+      "exceptionCode": "INACTIVE_EMPLOYEE",
+      "employeeIds": ["EMP-1010"],
+      "expectedResult": "EXCLUDE_FROM_NEW_ASSIGNMENTS"
+    }
+  ]
+}

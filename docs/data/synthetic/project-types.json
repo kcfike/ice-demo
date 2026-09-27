@@ -1,0 +1,52 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Initial project-type configuration derived from Phase 1 requirements."
+  },
+  "records": [
+    {
+      "projectTypeId": "PT-HARD-DOLLAR",
+      "code": "HARD_DOLLAR",
+      "name": "Hard Dollar",
+      "billingModel": "FIXED_PRICE",
+      "overtimeRuleSet": "OT-INCLUDED-IN-BID",
+      "packetFormat": "FIXED_PRICE_SUMMARY",
+      "requiredBudgetCategories": ["LABOR", "MATERIALS", "EQUIPMENT", "SUBCONTRACTORS"],
+      "requiredCloseoutDocumentTypes": ["APPROVED_ESTIMATE", "CUSTOMER_PO", "SIGNED_COMPLETION", "FINAL_COST_SUMMARY"],
+      "active": true
+    },
+    {
+      "projectTypeId": "PT-TM",
+      "code": "T_AND_M",
+      "name": "Time and Materials",
+      "billingModel": "ACTUAL_COST_PLUS_RATE",
+      "overtimeRuleSet": "OT-DAILY-8",
+      "packetFormat": "T_AND_M_DETAIL",
+      "requiredBudgetCategories": ["LABOR", "MATERIALS", "EQUIPMENT", "SUBCONTRACTORS"],
+      "requiredCloseoutDocumentTypes": ["CUSTOMER_AUTHORIZATION", "CUSTOMER_PO", "TIME_DETAIL", "MATERIAL_RECEIPTS", "ACTUALS_SUMMARY"],
+      "active": true
+    },
+    {
+      "projectTypeId": "PT-OMR",
+      "code": "OMR",
+      "name": "Operations, Maintenance and Repair",
+      "billingModel": "T_AND_M_WITH_ORIGINAL_ESTIMATE",
+      "overtimeRuleSet": "OT-DAILY-8",
+      "packetFormat": "OMR_ESTIMATE_VS_ACTUAL",
+      "requiredBudgetCategories": ["LABOR", "MATERIALS", "EQUIPMENT"],
+      "requiredCloseoutDocumentTypes": ["APPROVED_ESTIMATE", "WORK_COMPLETION", "TIME_DETAIL", "ACTUALS_SUMMARY"],
+      "active": true
+    },
+    {
+      "projectTypeId": "PT-CAMP",
+      "code": "CAMP",
+      "name": "Camp and Hospitality",
+      "billingModel": "SERVICE_PERIOD",
+      "overtimeRuleSet": "OT-CONTRACT-SPECIFIC",
+      "packetFormat": "CAMP_SERVICE_SUMMARY",
+      "requiredBudgetCategories": ["LABOR", "MATERIALS", "EQUIPMENT", "SUBCONTRACTORS"],
+      "requiredCloseoutDocumentTypes": ["SERVICE_ORDER", "OCCUPANCY_OR_MEAL_SUMMARY", "APPROVED_CHANGE_LOG"],
+      "active": true
+    }
+  ]
+}

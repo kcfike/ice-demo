@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "synthetic": true,
+    "purpose": "Procurement-style PO and material data for SOW matching and exception tests."
+  },
+  "records": [
+    {
+      "purchaseOrderId": "PO-70001",
+      "sowId": "SOW-2026-0001",
+      "vendor": "Northern Network Supply",
+      "status": "RECEIVED",
+      "orderDate": "2026-01-20",
+      "receivedDate": "2026-02-05",
+      "currency": "USD",
+      "lines": [
+        { "lineNumber": 1, "description": "Outdoor-rated fiber cable", "quantity": 6000, "unit": "FOOT", "unitCost": 4.85, "extendedCost": 29100.00 },
+        { "lineNumber": 2, "description": "Fiber distribution enclosures", "quantity": 8, "unit": "EACH", "unitCost": 1450.00, "extendedCost": 11600.00 }
+      ],
+      "total": 40700.00,
+      "matchingStatus": "MATCHED"
+    },
+    {
+      "purchaseOrderId": "PO-70002",
+      "sowId": "SOW-2026-0002",
+      "vendor": "Arctic Industrial Coatings",
+      "status": "RECEIVED",
+      "orderDate": "2026-02-08",
+      "receivedDate": "2026-02-17",
+      "currency": "USD",
+      "lines": [
+        { "lineNumber": 1, "description": "Low-temperature coating system", "quantity": 180, "unit": "GALLON", "unitCost": 218.00, "extendedCost": 39240.00 },
+        { "lineNumber": 2, "description": "Surface preparation consumables", "quantity": 1, "unit": "LOT", "unitCost": 9850.00, "extendedCost": 9850.00 }
+      ],
+      "total": 49090.00,
+      "matchingStatus": "MATCHED"
+    },
+    {
+      "purchaseOrderId": "PO-70003",
+      "sowId": "SOW-2026-0003",
+      "vendor": "Polar Pump and Controls",
+      "status": "PARTIALLY_RECEIVED",
+      "orderDate": "2026-02-19",
+      "receivedDate": null,
+      "currency": "USD",
+      "lines": [
+        { "lineNumber": 1, "description": "Process pump rebuild kit", "quantity": 1, "unit": "EACH", "unitCost": 7800.00, "extendedCost": 7800.00 },
+        { "lineNumber": 2, "description": "Motor control components", "quantity": 1, "unit": "LOT", "unitCost": 4650.00, "extendedCost": 4650.00 }
+      ],
+      "total": 12450.00,
+      "matchingStatus": "MATCHED"
+    },
+    {
+      "purchaseOrderId": "PO-70004",
+      "sowId": null,
+      "vendor": "North Coast General Supply",
+      "status": "RECEIVED",
+      "orderDate": "2026-02-25",
+      "receivedDate": "2026-03-01",
+      "currency": "USD",
+      "lines": [
+        { "lineNumber": 1, "description": "Electrical and network consumables", "quantity": 1, "unit": "LOT", "unitCost": 6200.00, "extendedCost": 6200.00 }
+      ],
+      "total": 6200.00,
+      "matchingStatus": "EXCEPTION",
+      "exceptionCode": "MISSING_SOW_IDENTIFIER"
+    }
+  ]
+}
