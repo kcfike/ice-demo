@@ -28,8 +28,11 @@ gantt
     Feature 022 (accrual)                      :c1, 75, 10
 ```
 
-*(Timeline is relative only; calendar dates require the D-031 staffing
-decision and spike outcomes.)*
+*(Timeline is relative only. **D-031 is now DECIDED FOR DEVELOPMENT
+(ADR-005):** the delivery model is two-track, relative, and input-gated —
+Ralph (AI) is the primary implementer and the client/ICE input track is the
+critical path. Calendar dates attach only when ICE commits input dates (the
+DISC-001 and DISC-012 spikes). See `docs/architecture/decisions/ADR-005-delivery-model.md`.)*
 
 ## 2. R1 — Core SOW Lifecycle (49 requirements)
 
@@ -72,10 +75,21 @@ Pre-R1 gate).
 | PP-072 | Project financial / accrual reporting — R3 |
 
 ### Entry criteria (before Feature 001 builds)
-1. D-001 (platform stack) and D-002 (document storage) decided — needed for
-   Feature 001 scaffolding.
+1. ~~D-001 (platform stack) and D-002 (document storage) decided~~ — **now
+   DECIDED FOR DEVELOPMENT** (ADR-001, ADR-002). Feature 001 scaffolding may
+   proceed.
 2. DISC-001 kickoff: T-Sheets spike (PP-047) started — it is the critical path.
-3. D-007 (identity mechanism) decided — Feature 002 depends on it.
+3. ~~D-007 (identity mechanism) decided~~ — **now DECIDED FOR DEVELOPMENT**
+   (ADR-003). Feature 002 depends on it.
+4. D-029 (release controls) — **now DECIDED FOR DEVELOPMENT** (ADR-004);
+   Feature 001 scaffolds the GitHub Actions pipeline + PROD approval gate.
+
+> **All five before-001 decisions (D-001, D-002, D-007, D-029, D-031) are
+> now DECIDED FOR DEVELOPMENT.** See `docs/architecture/decision-register.md`
+> §10 and `docs/architecture/decisions/`. Development defaults vs production
+> approach are made explicit in each ADR; client/IT confirmation items remain
+> open (they gate real-adapter verification D-033 and calendar commitment,
+> not the development path).
 
 ### Exit criteria
 1. All 49 R1 requirements pass acceptance criteria (PRD §3) against simulators.
