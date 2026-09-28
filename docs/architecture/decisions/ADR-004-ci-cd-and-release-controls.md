@@ -50,8 +50,8 @@ Constraints that matter:
 ### 2.1 CI/CD substrate
 
 **Option A — GitHub Actions (recommended).** Native to the GitHub host; free
-for public/internal use; Linux runners; `uv` + `npm` available via setup
-actions; no extra infrastructure.
+for public/internal use; Linux runners; `dotnet` + `npm` available via
+setup actions; no extra infrastructure.
 
 **Option B — Azure DevOps Pipelines.** Microsoft-native; would be the choice
 if ICE mandates Azure DevOps. Heavier; not required by any constraint.
@@ -89,18 +89,30 @@ is the test suite; the gate to PROD is a human approval, not code.
 ### 2.3 What runs in CI (the gate)
 
 Fixed by the architecture + synthetic strategy, and now confirmed:
-1. **Lint/typecheck:** `ruff check`, `mypy` (Python); `tsc`/`eslint` (frontend, via `npm run lint` if configured).
-2. **Unit tests:** `pytest` (domain, pure logic).
+1. **Restore + build:** `dotnet restore` → `dotnet build --configuration
+   Release --no-restore` (backend solution; frontend compiles in step 6).
+2. **Unit tests:** `dotnet test --configuration Release --no-build`
+   (domain, pure logic).
 3. **Contract tests:** the adapter-agnostic suite run against **every
    simulator** adapter (synthetic strategy §5). This is the PP-016 gate.
-4. **Integration tests:** `pytest` against the full simulator stack (workflows
-   WF-1…WF-6 on fixtures).
-5. **Architecture test (PP-016):** fail the build if any `domain/**` file
-   imports a vendor package or a `simulator/**` type (synthetic strategy §5;
-   architecture §3). This is the "no vendor imports in domain" gate.
+4. **Integration tests:** `dotnet test` against the full simulator stack
+   (workflows WF-1…WF-6 on fixtures).
+5. **Architecture test (PP-016):** fail the build if any `Domain` project
+   file imports a vendor package or a `Simulators` type (synthetic strategy
+   §5; architecture §3). This is the "no vendor imports in domain" gate.
 6. **Frontend build:** `npm ci && npm run build` (ensures the SPA compiles).
 7. **Packaging:** produce a deployable (backend artifact + frontend static
    bundle).
+
+> **Amendment (2026-09-27):** the concrete CI commands were updated when
+> **ADR-006** superseded **ADR-001** (Python 3.12 / FastAPI → C# / .NET 10
+> platform). The gate *model* is unchanged: restore → build → test
+> (unit + contract + integration + architecture) → frontend build →
+> package. Only the tooling references are language-specific: the Python-era
+> commands (`ruff`, `mypy`, `pytest`, `uv run`) were replaced with the
+> `dotnet restore` / `dotnet build` / `dotnet test` steps above, aligned with
+> ADR-006 §4.3 and Feature 001 (specification §10, tasks N12). The Python-era
+> wording is retained in ADR-001 as history.
 
 ## 3. Evaluation Summary
 
@@ -147,9 +159,9 @@ Concretely:
    recommendation (enforced via GitHub repo settings, documented in the
    workflow). The tag→DRY-RUN→PROD-approval path is defined but its real
    deploy targets are IT-provisioned (D-033).
-2. **Ralph's loop:** implement → run `pytest` + architecture test locally →
-   push → CI re-runs the same suite → merge green → (for a release) tag →
-   DRY-RUN → human approves PROD. Ralph is responsible for keeping the CI gate
+2. **Ralph's loop:** implement → run `dotnet test` + architecture test
+   locally → push → CI re-runs the same suite → merge green → (for a release)
+   tag → DRY-RUN → human approves PROD. Ralph is responsible for keeping the CI gate
    green; the PROD gate is a human.
 3. **Determinism:** because all external systems are simulators in CI
    (constraints 2, 4, 7), the gate is fully reproducible on any runner —
@@ -179,7 +191,7 @@ Concretely:
 | Aspect | Development default | Production approach |
 |---|---|---|
 | CI substrate | GitHub Actions | GitHub Actions (or Azure DevOps if mandated) |
-| Local loop (Windows) | `uv run pytest` + `npm run build` | same lockfiles; CI is the authoritative gate |
+| Local loop (Windows) | `dotnet test` + `npm run build` | same lockfiles; CI is the authoritative gate |
 | DEV deploy | Automatic on `main` (all simulators) | DEV target provisioned by IT; same pipeline |
 | Release | git tag | git tag |
 | DRY-RUN | cutover rehearsal env (real identity + real DB + sim adapters + real doc store) | same, IT-provisioned |

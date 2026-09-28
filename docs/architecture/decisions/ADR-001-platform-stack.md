@@ -3,12 +3,22 @@
 | Field | Value |
 |---|---|
 | Decision ID | D-001 |
-| Status | **DECIDED FOR DEVELOPMENT** |
+| Status | **SUPERSEDED** by [ADR-006](ADR-006-platform-stack.md) (2026-09-26) |
 | Owner | PM/IT |
 | Release | R1 |
 | Blocks | Feature 001 (Platform Foundation & CI/CD) |
 | Related ADRs | ADR-002, ADR-003, ADR-004, ADR-005 |
 | Date | 2026-09-26 |
+
+> **⚠ SUPERSEDED — do not use as the implementation baseline.**
+> This ADR selected a **Python 3.12+ / FastAPI** stack. Before any
+> implementation existed, the expected client environment (ICE Services is a
+> Microsoft technology shop) was confirmed, and the decision was corrected to
+> a **C# / .NET** baseline. See [ADR-006 — Platform Stack (C# / .NET)](ADR-006-platform-stack.md),
+> which **supersedes** this ADR. The Python decision below is retained as
+> decision history (what was decided, and why); it is **no longer** the
+> development/demo or production baseline. D-001 in the decision register now
+> points to ADR-006.
 
 ## 1. Context
 

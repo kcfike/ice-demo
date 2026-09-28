@@ -22,10 +22,11 @@
    capabilities out of the R1 path.
 5. **Boring, supported technology** in a Microsoft-centric shop. D-001
    (platform stack) and D-002 (document storage) are now **decided for
-   development** (ADR-001, ADR-002): Python/FastAPI + React, Azure Blob behind
-   the `DocumentStore` port, Entra ID OIDC behind `IdentityProvider` (ADR-003).
-   The architecture below stays language-neutral on purpose, so the decided
-   stack does not change any port, domain model, or simulator.
+   development** (ADR-006, ADR-002): C# / .NET / ASP.NET Core + React, Azure
+   Blob behind the `DocumentStore` port, Entra ID OIDC behind
+   `IdentityProvider` (ADR-003). The architecture below stays language-neutral
+   on purpose, so the decided stack does not change any port, domain model, or
+   simulator.
 
 ## 2. High-Level View
 
@@ -151,8 +152,10 @@ classDiagram
 ## 5. Service Interfaces (Ports)
 
 > Contract style: language-neutral (these map 1:1 to a typed interface in the
-> chosen stack, D-001). All methods are async. All return `Result<T>` with an
-  explicit error shape; adapters must not throw across the port boundary.
+> chosen stack, D-001). All methods are async. Every method returns a result
+> with an explicit error shape — value-producing operations return
+> `Result<T>`, valueless commands return the non-generic `Result` — and
+> adapters must not throw across the port boundary.
 > Every port has: real adapter, simulator adapter, contract test suite,
 > config switch — details in §6 and `docs/data/synthetic-data-strategy.md`.
 
@@ -450,7 +453,7 @@ Rules:
 ### 8.1 Identity (Entra ID) — decided for development (ADR-003)
 SSO (OIDC) + MFA via Conditional Access (D-028) is the **production** path.
 **Decided (D-007 / ADR-003):** production authN = Entra ID OIDC (via
-`python-msal`); role assignment = **in-app role table** keyed by the Entra
+MSAL for .NET); role assignment = **in-app role table** keyed by the Entra
 subject (managed via the PP-051 admin UI); MFA = **Entra Conditional Access**
 (the app does not re-implement MFA in prod). Development/CI uses
 `SimIdentityProvider`. Identity provisioning stays in Entra. D-009 (RBAC

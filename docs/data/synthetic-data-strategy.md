@@ -256,8 +256,9 @@ D-033). Same assertions, different adapter.
 | AuditService | record→query round-trip; **immutability** (no API mutates/deletes rows); `export` completeness; `correlationId` joins audit ↔ activity log (PP-022) |
 | NotificationService | `send`→`deliveryStatus` round-trip; recipient resolution via IdentityProvider; `createTask` visible in queue; email templating deterministic |
 
-**Shared error contract:** every port returns `Result<T>`; adapter errors are
-mapped to a closed enum (`AdapterAuthError | AdapterNotFound | AdapterTimeout |
+**Shared error contract:** every port method returns a result type —
+`Result<T>` for value-producing operations, the non-generic `Result` for
+valueless commands; adapter errors are mapped to a closed enum (`AdapterAuthError | AdapterNotFound | AdapterTimeout |
 AdapterRateLimited | AdapterOther`) with an `isRetryable` flag. Business code
 reacts to this enum, never to vendor exceptions (this is the testable core of
 PP-016).

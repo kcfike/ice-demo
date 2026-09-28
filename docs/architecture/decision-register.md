@@ -24,7 +24,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 
 | ID | Decision | Status | Owner | Rel | Blocks | Notes / Recommendation |
 |---|---|---|---|---|---|---|
-| D-001 | Platform stack (language, framework, hosting) | **Decided for development** | PM/IT | R1 | 🔺 001 | **DECIDED FOR DEVELOPMENT (ADR-001).** Python 3.12+ / FastAPI + React (Vite) + SQLAlchemy; SQLite (dev/CI), PostgreSQL (prod target). Supersedes the earlier .NET recommendation — rationale and IT-confirmation items in `decisions/ADR-001-platform-stack.md`. |
+| D-001 | Platform stack (language, framework, hosting) | **Decided for development** | PM/IT | R1 | 🔺 001 | **DECIDED FOR DEVELOPMENT (ADR-006).** C# / .NET 10 LTS / ASP.NET Core + React (Vite) + Entity Framework Core; SQLite (dev/CI), Azure SQL / SQL Server (prod target). **Supersedes ADR-001** (Python, marked Superseded — retained as history); the baseline was corrected before implementation because ICE Services is a Microsoft-aligned shop. Rationale + IT-confirmation items in `decisions/ADR-006-platform-stack.md`. |
 | D-002 | Document storage backend | **Decided for development** | IT | R1 | 🔺 005 | **DECIDED FOR DEVELOPMENT (ADR-002).** Azure Blob + Entra-scoped/SAS URLs behind `DocumentStore` (prod); `SimDocumentStore` (dev/CI). SharePoint remains a valid same-port alternate. Rationale + IT-confirmation in `decisions/ADR-002-document-storage.md`. |
 | D-029 | Release controls & deployment gates | **Decided for development** | IT | R1 | 001 | **DECIDED FOR DEVELOPMENT (ADR-004).** GitHub Actions; branch protection + PR review + tag-based release + manual PROD approval gate; CI gate = lint/typecheck/unit/contract/integration/architecture(PP-016)+frontend build. Rationale + IT-confirmation in `decisions/ADR-004-ci-cd-and-release-controls.md`. |
 | D-030 | Audit & security log retention + export format | Open | IT | R1 | 002 | ICE policy retention period; CSV export; SIEM requirement (register silent on SIEM). |
@@ -102,7 +102,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 ## 10. Decision Status Summary
 
 ### 🔺 Required before Feature 001 (Platform Foundation & CI/CD) — **ALL DECIDED FOR DEVELOPMENT (2026-09-26)**
-- **D-001** — platform stack → **DECIDED FOR DEVELOPMENT** ([ADR-001](decisions/ADR-001-platform-stack.md)): Python 3.12+/FastAPI + React (Vite) + SQLAlchemy; SQLite (dev/CI) / PostgreSQL (prod target)
+- **D-001** — platform stack → **DECIDED FOR DEVELOPMENT** ([ADR-006](decisions/ADR-006-platform-stack.md)): C# / .NET 10 LTS / ASP.NET Core + React (Vite) + Entity Framework Core; SQLite (dev/CI) / Azure SQL / SQL Server (prod target). **Supersedes [ADR-001](decisions/ADR-001-platform-stack.md)** (Python, marked Superseded — retained as history).
 - **D-002** — document storage → **DECIDED FOR DEVELOPMENT** ([ADR-002](decisions/ADR-002-document-storage.md)): Azure Blob behind `DocumentStore` (prod); `SimDocumentStore` (dev/CI)
 - **D-007** — identity mechanism → **DECIDED FOR DEVELOPMENT** ([ADR-003](decisions/ADR-003-identity-and-access.md)): Entra OIDC + in-app role table + Entra CA (MFA); `SimIdentityProvider` (dev/CI)
 - **D-029** — release controls → **DECIDED FOR DEVELOPMENT** ([ADR-004](decisions/ADR-004-ci-cd-and-release-controls.md)): GitHub Actions; branch protection + tag + PROD approval gate

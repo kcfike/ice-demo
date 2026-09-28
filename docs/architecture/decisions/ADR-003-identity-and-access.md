@@ -95,7 +95,7 @@ in IT's hands (D-028 owns the exact method).
 
 | Aspect | Dev default | Production |
 |---|---|---|
-| AuthN | `SimIdentityProvider` (fixture users, `fixtures/identity/users.json`) | Entra ID OIDC (python-msal / authlib) |
+| AuthN | `SimIdentityProvider` (fixture users, `fixtures/identity/users.json`) | Entra ID OIDC (MSAL for .NET) |
 | Role source | Fixture `roles[]` per user; in-app role table | In-app role table (subject from Entra) |
 | MFA | Simulated challenge/verify in contract tests | Entra Conditional Access (D-028 method) |
 | Session | App-issued session token (timeout per D-027) | App-issued session token (timeout per D-027) |
@@ -126,7 +126,7 @@ Concretely:
 ## 5. Practical Consequences
 
 1. **Feature 002** builds the `IdentityProvider` real adapter (Entra OIDC via
-   python-msal) + the in-app role table + user admin UI + security-event
+   MSAL for .NET) + the in-app role table + user admin UI + security-event
    logging (PP-070). It is testable end-to-end against the simulator first.
 2. **Feature 001** scaffolds the port + `SimIdentityProvider` + config switch
    `identity.provider = entra | sim` so identity is swappable (constraint 4).
