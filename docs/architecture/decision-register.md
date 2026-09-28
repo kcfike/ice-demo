@@ -8,7 +8,10 @@
 | Discovery | Technical unknowns also tracked in `docs/discovery/discovery-backlog.md` (DISC-xxx) |
 
 **Statuses:** `Open` (no decision), `Proposed` (BMAD recommendation, needs owner sign-off),
-`Decided` (owner confirmed), `Blocked` (waiting on external party), `Deferred` (to R2/R3).
+`Decided` (owner confirmed), `Decided for development` (development default fixed and
+ready to build against; production approach and client/IT confirmation items
+documented in the linked ADR — see §10), `Blocked` (waiting on external
+party), `Deferred` (to R2/R3).
 
 **Owner roles:** PM (project), OPA (Ops Accounting), NSA (NS Admin), IT (ICE IT/Security),
 FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
@@ -21,11 +24,11 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 
 | ID | Decision | Status | Owner | Rel | Blocks | Notes / Recommendation |
 |---|---|---|---|---|---|---|
-| D-001 | Platform stack (language, framework, hosting) | Proposed | PM/IT | R1 | 🔺 001 | Recommend: .NET 8 ASP.NET Core + React (or Blazor) on Azure App Service, SQL Server. Fits Microsoft-centric shop, Entra, Dataverse, Blob. Needs sign-off before scaffolding. |
-| D-002 | Document storage backend | Proposed | IT | R1 | 🔺 005 | Recommend: Azure Blob + Entra-scoped URLs behind `DocumentStore`. SharePoint adapter remains an option (same port). Register: SharePoint vs Blob still open (PP-006, PP-046). |
-| D-029 | Release controls & deployment gates | Open | IT | R1 | 001 | Branch protection, PR review, tag-based deploy, PROD approval gate (PP-056). |
+| D-001 | Platform stack (language, framework, hosting) | **Decided for development** | PM/IT | R1 | 🔺 001 | **DECIDED FOR DEVELOPMENT (ADR-006).** C# / .NET 10 LTS / ASP.NET Core + React (Vite) + Entity Framework Core; SQLite (dev/CI), Azure SQL / SQL Server (prod target). **Supersedes ADR-001** (Python, marked Superseded — retained as history); the baseline was corrected before implementation because ICE Services is a Microsoft-aligned shop. Rationale + IT-confirmation items in `decisions/ADR-006-platform-stack.md`. |
+| D-002 | Document storage backend | **Decided for development** | IT | R1 | 🔺 005 | **DECIDED FOR DEVELOPMENT (ADR-002).** Azure Blob + Entra-scoped/SAS URLs behind `DocumentStore` (prod); `SimDocumentStore` (dev/CI). SharePoint remains a valid same-port alternate. Rationale + IT-confirmation in `decisions/ADR-002-document-storage.md`. |
+| D-029 | Release controls & deployment gates | **Decided for development** | IT | R1 | 001 | **DECIDED FOR DEVELOPMENT (ADR-004).** GitHub Actions; branch protection + PR review + tag-based release + manual PROD approval gate; CI gate = lint/typecheck/unit/contract/integration/architecture(PP-016)+frontend build. Rationale + IT-confirmation in `decisions/ADR-004-ci-cd-and-release-controls.md`. |
 | D-030 | Audit & security log retention + export format | Open | IT | R1 | 002 | ICE policy retention period; CSV export; SIEM requirement (register silent on SIEM). |
-| D-031 | Staffing & timeline | Open | PM | R1 | — | Calendar dates for Gantt in release-plan depend on this. |
+| D-031 | Staffing & timeline | **Decided for development** | PM | R1 | — | **DECIDED FOR DEVELOPMENT (ADR-005).** Two-track, relative, input-gated delivery: Ralph (AI) primary implementer; client/ICE input track is the critical path (DISC-001→008, DISC-012→015→R1 exit). Relative timeline — calendar dates attach only when ICE commits input dates. Not a code blocker. See `decisions/ADR-005-delivery-model.md`. |
 | D-033 | Real-system verification & credentials | Open | IT/VENDOR | R1 | 007–010 | When do real sandbox creds (T-Sheets, Dataverse, HR, AR location) arrive? Gates real-adapter verification. |
 | D-034 | Message broker for R2 GL sync | Deferred | PM/IT | R2 | — | Revisit if PP-054 introduces async volume. Not in R1. |
 
@@ -33,7 +36,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 
 | ID | Decision | Status | Owner | Rel | Blocks | Notes / Recommendation |
 |---|---|---|---|---|---|---|
-| D-007 | Authentication/role-assignment mechanism | Proposed | IT | R1 | 🔺 002 | Register: Entra ID, AIG Portal, or in-app (PP-041, PP-051). Recommend: Entra ID OIDC (SSO + MFA) + in-app role table. Confirm AR/Finance direct-logins; exact role list. |
+| D-007 | Authentication/role-assignment mechanism | **Decided for development** | IT | R1 | 🔺 002 | **DECIDED FOR DEVELOPMENT (ADR-003).** Entra ID OIDC (prod authN) + in-app role table (role assignment, subject from Entra) + Entra Conditional Access for MFA, all behind `IdentityProvider`; `SimIdentityProvider` for dev/CI. Mechanism fixed; D-009/D-027/D-028 values remain open. See `decisions/ADR-003-identity-and-access.md`. |
 | D-009 | RBAC permission matrix + edit/post-billing rules | Open | PM/OPA | R1 | 002, 006 | Which role may do which state transition (PP-017), edit budget (PP-008), true-up (PP-026). Also post-billing edit rules. |
 | D-027 | Session timeout duration | Open | IT | R1 | 002 | ICE IT guidance (PP-049). |
 | D-028 | MFA method per ICE policy | Open | IT | R1 | 002 | Recommend Entra Conditional Access (PP-050). |
@@ -98,12 +101,19 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 
 ## 10. Decision Status Summary
 
-### 🔺 Required before Feature 001 (Platform Foundation & CI/CD)
-- **D-001** — platform stack (scaffolding depends on it)
-- **D-002** — document storage backend (affects Feature 005 design & foundation deps)
-- **D-007** — identity mechanism (affects Feature 002, which 001 scaffolds auth around)
-- **D-029** — release controls (CI/CD is literally Feature 001)
-- **D-031** — staffing/timeline (needed to schedule; not a code blocker)
+### 🔺 Required before Feature 001 (Platform Foundation & CI/CD) — **ALL DECIDED FOR DEVELOPMENT (2026-09-26)**
+- **D-001** — platform stack → **DECIDED FOR DEVELOPMENT** ([ADR-006](decisions/ADR-006-platform-stack.md)): C# / .NET 10 LTS / ASP.NET Core + React (Vite) + Entity Framework Core; SQLite (dev/CI) / Azure SQL / SQL Server (prod target). **Supersedes [ADR-001](decisions/ADR-001-platform-stack.md)** (Python, marked Superseded — retained as history).
+- **D-002** — document storage → **DECIDED FOR DEVELOPMENT** ([ADR-002](decisions/ADR-002-document-storage.md)): Azure Blob behind `DocumentStore` (prod); `SimDocumentStore` (dev/CI)
+- **D-007** — identity mechanism → **DECIDED FOR DEVELOPMENT** ([ADR-003](decisions/ADR-003-identity-and-access.md)): Entra OIDC + in-app role table + Entra CA (MFA); `SimIdentityProvider` (dev/CI)
+- **D-029** — release controls → **DECIDED FOR DEVELOPMENT** ([ADR-004](decisions/ADR-004-ci-cd-and-release-controls.md)): GitHub Actions; branch protection + tag + PROD approval gate
+- **D-031** — staffing/timeline → **DECIDED FOR DEVELOPMENT** ([ADR-005](decisions/ADR-005-delivery-model.md)): two-track, relative, input-gated delivery; not a code blocker
+
+> **Result:** every decision that previously blocked Feature 001 is now decided
+> for development (with development defaults vs production approach made
+> explicit in each ADR). Feature 001 scaffolding may proceed to Spec Kit.
+> Client/IT confirmation items are captured in each ADR's §6 and remain open
+> (not silently resolved); they gate real-adapter verification (D-033) and
+> calendar commitment (D-031), not the development path.
 
 > Note: D-010 (T-Sheets) and D-018 (PO matching) do **not** block Feature 001, but the
 > DISC-001 spike should be **started immediately** (it is the critical path and gates

@@ -5,8 +5,9 @@
 | Status | BMAD draft v1.0 (2026-09-26) |
 | Scope | Phase 1 (R1 detailed; R2/R3 extension points) |
 | Decisions | `docs/architecture/decision-register.md` |
+| ADRs | `docs/architecture/decisions/` (ADR-001…ADR-005) |
 | Synthetic data | `docs/data/synthetic-data-strategy.md` |
-| Stack decision | D-001 (platform stack), D-002 (document storage) |
+| Stack decision | D-001 (platform stack) → **ADR-001**; D-002 (document storage) → **ADR-002** |
 
 ## 1. Architecture Goals
 
@@ -19,8 +20,13 @@
    the same unit of work as the change; audit is append-only.
 4. **R1 boundary enforceability:** the feature sequence and RBAC keep R2/R3
    capabilities out of the R1 path.
-5. **Boring, supported technology** in a Microsoft-centric shop (Entra ID,
-   Dataverse, SharePoint/Blob are all plausible; final choice per D-001/D-002).
+5. **Boring, supported technology** in a Microsoft-centric shop. D-001
+   (platform stack) and D-002 (document storage) are now **decided for
+   development** (ADR-006, ADR-002): C# / .NET / ASP.NET Core + React, Azure
+   Blob behind the `DocumentStore` port, Entra ID OIDC behind
+   `IdentityProvider` (ADR-003). The architecture below stays language-neutral
+   on purpose, so the decided stack does not change any port, domain model, or
+   simulator.
 
 ## 2. High-Level View
 
@@ -146,8 +152,10 @@ classDiagram
 ## 5. Service Interfaces (Ports)
 
 > Contract style: language-neutral (these map 1:1 to a typed interface in the
-> chosen stack, D-001). All methods are async. All return `Result<T>` with an
-  explicit error shape; adapters must not throw across the port boundary.
+> chosen stack, D-001). All methods are async. Every method returns a result
+> with an explicit error shape — value-producing operations return
+> `Result<T>`, valueless commands return the non-generic `Result` — and
+> adapters must not throw across the port boundary.
 > Every port has: real adapter, simulator adapter, contract test suite,
 > config switch — details in §6 and `docs/data/synthetic-data-strategy.md`.
 
@@ -406,7 +414,14 @@ Full fixture formats, seeding rules, and contract-test harness are defined in
 
 ## 7. Configuration & Adapter Switching
 
-Central `appsettings`/env configuration, per environment:
+> **Decided defaults (2026-09-26):** `identity.provider = sim` (dev/CI) /
+> `entra` (prod) — ADR-003; `documents.provider = sim` (dev/CI) / `blob`
+> (prod) — ADR-002. The rest of the provider keys keep their sim/real split
+> and are unaffected. Secrets stay in the secret store, never in the config
+> file.
+
+Central config file / env configuration (e.g., `config.json` + environment
+variables, or `.env`), per environment:
 
 ```jsonc
 {
@@ -435,10 +450,14 @@ Rules:
 
 ## 8. External System Integration Notes
 
-### 8.1 Identity (Entra ID) — assumed available
-SSO (OIDC) + MFA via Conditional Access (D-028). In-app user management
-(PP-051) is an app-side table of (Entra subject ↔ roles); identity
-provisioning stays in Entra.
+### 8.1 Identity (Entra ID) — decided for development (ADR-003)
+SSO (OIDC) + MFA via Conditional Access (D-028) is the **production** path.
+**Decided (D-007 / ADR-003):** production authN = Entra ID OIDC (via
+MSAL for .NET); role assignment = **in-app role table** keyed by the Entra
+subject (managed via the PP-051 admin UI); MFA = **Entra Conditional Access**
+(the app does not re-implement MFA in prod). Development/CI uses
+`SimIdentityProvider`. Identity provisioning stays in Entra. D-009 (RBAC
+matrix), D-027 (session timeout), D-028 (MFA method) remain open values.
 
 ### 8.2 T-Sheets — unconfirmed capabilities (DISC-001)
 | Capability | Status | Impact if unavailable |
@@ -487,6 +506,12 @@ R1 default: shared-folder deposit. Same port supports portal/email.
   activation (PP-001).
 
 ## 11. CI/CD & Environments (PP-056)
+
+> **Decided (D-029 / ADR-004):** GitHub Actions substrate; `main` branch
+> protection + PR review; automatic DEV deploy on `main`; **tag-based release**
+> → DRY-RUN → PROD behind a **manual approval gate**. The CI gate is the full
+> lint/typecheck/unit/contract/integration/architecture(PP-016)/frontend-build
+> suite. See `decisions/ADR-004-ci-cd-and-release-controls.md`.
 
 ```
 repo → build (deps, typecheck, unit) → test (contract vs simulators,
