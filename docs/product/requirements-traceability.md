@@ -164,3 +164,32 @@ as Feature 017.
 | PP-047 | 🔴 blocker | DISC-001, D-010 |
 | PP-051 | ⚠️ management mechanism | D-007 |
 | PP-054 | ⚠️ TBC mechanism | D-024, DISC-014 |
+
+## 6. Epic → Feature Map
+
+Derived table: epics and their PP IDs come from the authoritative register
+(`docs/source/phase-1-requirements-register-v2.2.md`, 8 epics, 62 PPs); the
+PP → feature mapping comes from the §1 matrix. The register, PRD, and
+release-plan map epics to PP IDs only — this section is the single place that
+closes the epic → feature gap.
+
+| Epic (register) | PP IDs | Feature(s) | Release |
+|---|---|---|---|
+| Epic 1 — SOW / Project Setup | PP-001–009 | 004 (core setup); 003 (PP-004 project type); 005 (PP-006 documents); 006 (PP-007 activation, PP-008 edit/amend); 015 (PP-001 number sequence) | R1 |
+| Epic 2 — Timekeeping Integration | PP-010–016 | 008 (provisioning); 009 (retrieval; PP-015 R1 minimum); 007, 010 (PP-016 adapter convention); 013 (PP-013 reopen); 018 (PP-015 full) | R1; R2 (PP-015 full) |
+| Epic 3 — Project Tracking & Monitoring | PP-017–022 | 006 (PP-017 state machine, PP-022 activity log); 011 (PP-018, PP-019 usage); 003 (PP-019 OM code list); 017 (PP-020, PP-021) | R1; R2 (PP-020, PP-021) |
+| Epic 4 — Billing / Invoicing / Closeout | PP-023–032, PP-055, PP-068, PP-069 | 012 (packet core); 009 (PP-023 labor calc); 010 (PP-024 retrieval); 011 (PP-031 data model); 013 (PP-029 status, PP-030, PP-069); 014 (PP-029 delivery, PP-031 tracking); 003 (PP-068 register config); 017 (PP-055); 019 (PP-025); 020 (PP-027); 022 (PP-032) | R1; R2 (PP-025, PP-027, PP-055); R3 (PP-032) |
+| Epic 5 — Master Data & Reference Data | PP-033–037 | 003 (core masters); 015 (PP-033 customer master data); 018 (PP-036 OT rules) | R1; R2 (PP-036) |
+| Epic 6 — Integrations | PP-038–040, PP-053, PP-054 | 007 (ports); 008, 009 (PP-039 T-Sheets); 010 (PP-038 procurement usage); 014 (PP-040 AR handoff); 021 (PP-054 GL) | R1; R2 (PP-054) |
+| Epic 7 — Platform, Security & Infrastructure | PP-041–047, PP-049–052, PP-056, PP-057, PP-070 | 002 (identity/security core); 001 (PP-045 baseline, PP-056, PP-057 tokens); 005 (PP-046 storage); 008 (PP-047 spike gate); 012 (PP-045 assembly perf); 013 (PP-043 R1 minimum); 015 (PP-044 migration); 021 (PP-043 full); 003–013 (PP-042 audit usage) | Pre-R1 (PP-047); R1; R2 (PP-043) |
+| Epic 8 — Reporting | PP-048, PP-071, PP-072 | 021 (PP-048, PP-071); 022 (PP-072) | R2; R3 |
+
+> **Notes.**
+>
+> - **PP-042 (Epic 7)** is defined in Feature 002 and used by Features 003–013
+>   per §1; the epic map lists it once under 002 (range notation follows §1).
+> - The **R1 reporting slice (Feature 016)** is delivered from Epic 3 (PP-018)
+>   and Epic 4 (PP-031) PPs, so it does not appear under Epic 8 — Epic 8
+>   itself (PP-048, PP-071, PP-072) is R2/R3 scope.
+> - Release column reflects the PP-level release assignments: an epic can be
+>   satisfied across releases when some of its PPs are R2/R3 (see §2).
