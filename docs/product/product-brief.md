@@ -102,12 +102,15 @@ is R2.
 - T-Sheets API capabilities (sub-code creation, employee restriction,
   timestamps) are **unconfirmed** (PP-011, PP-047) — Pre-R1 spike is a blocker
   gate for the provisioning feature.
-- Procurement Power App API surface and PO↔SOW matching are unconfirmed
-  (PP-038, PP-024).
+- Procurement Power App is backed by an **on-prem SQL Server** (not
+  Dataverse); the PO↔SOW matching field and the on-prem read path are
+  unconfirmed (PP-038, PP-024; D-018, D-035).
+- Rates/billing live in an **Access DB**, not T-Sheets (D-017); the rate
+  schema and on-prem read path are unconfirmed (DISC-018, D-035).
 - HR source of truth is unconfirmed (PP-053).
 - AR handoff mechanism is unconfirmed (PP-029, PP-040).
 - Microsoft-centric environment is implied by the register (Entra ID,
-  Dataverse/Power App, SharePoint, Access).
+  on-prem SQL/Power App, SharePoint, Access).
 - Baker Tilly brand standards apply (PP-057).
 
 ## 7. Key Risks (from register)

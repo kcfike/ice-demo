@@ -84,7 +84,8 @@ contract-tests/                    # adapter-agnostic suite, parameterized per p
 |---|---|---|---|---|
 | IdentityProvider | Entra OIDC (D-007) | `SimIdentityProvider` | `identity/users.json` | `identity.provider` |
 | TimekeepingService | T-Sheets REST | `SimTimekeepingService` | `timekeeping/*.json` | `timekeeping.provider` |
-| ProcurementService | Dataverse OData | `SimProcurementService` | `procurement/*.json` | `procurement.provider` |
+| ProcurementService | **on-prem SQL Server** (Power App backend, not Dataverse) | `SimProcurementService` | `procurement/*.json` | `procurement.provider = sql \| sim` |
+| RatesSource (Access billing DB) | **Access DB read** (rates + billing history, D-017) | rates seeded in `labor-classifications.json` + `billing-examples.json` | `labor-classifications.json`, `billing-examples.json` | part of `procurement.provider` / D-035 |
 | EmployeeDirectory | HR source (DISC-006) | `SimEmployeeDirectory` | `employees/employees.json` | `employee.provider` |
 | DocumentStore | Azure Blob / SharePoint (D-002) | `SimDocumentStore` | `documents/seed-documents.json` | `documents.provider` |
 | ARHandoffService | folder/portal/email (D-020) | `SimARHandoff` | `ar-handoff/target-config.json` | `arhandoff.provider` |
@@ -279,6 +280,9 @@ a vendor package or a `simulator/**` type (PP-016 isolation).
 - Whether AR/Finance are external identities or internal (affects token flow).
 
 ### 6.2 Timekeeping (T-Sheets) — DISC-001 🔴 / D-010, D-011
+- **T-Sheets is hours-only (D-017).** Rates are NOT expected to be available
+  via the T-Sheets API — they come from the **Access billing DB** (see §6.8).
+  Do not build a rates read against T-Sheets.
 - **Sub-code creation via API — unconfirmed** (the 🔴 risk).
 - Employee restriction per sub-code — unconfirmed.
 - Time-entry **start/end timestamps — unconfirmed** (blocks OT precision).
@@ -287,13 +291,16 @@ a vendor package or a `simulator/**` type (PP-016 isolation).
 - Sandbox credentials + environment (D-033).
 - Error/response shapes (for the shared error contract mapping).
 
-### 6.3 Procurement (Dataverse) — DISC-003 / D-018
-- Stable entity set + field names (PO, received goods, stock issues, vendor).
-- **Which field carries the SOW/job number** for matching (D-018) — if absent,
-  CSV-import fallback (release-plan contingency).
-- Auth: service principal (app-only) vs delegated; which is allowed by IT.
+### 6.3 Procurement (on-prem SQL) — DISC-003 / D-018, D-035
+- **Backend is on-prem SQL Server** (not Dataverse): no cloud OData API. Real
+  adapter is a SQL read path.
+- **Which SQL table/field carries the SOW/job number** for matching (D-018) —
+  if absent, CSV-import fallback (release-plan contingency).
+- **Connectivity to on-prem SQL (D-035 🔴):** gateway / co-located / extract —
+  must be decided before the real adapter is built (not solvable by the sim).
+- Auth: SQL auth (contained/service principal) vs delegated; which IT allows.
 - Which departments are fully on the Power App (coverage of PP-024 data).
-- OData pagination / `$filter` support; rate limits.
+- SQL read pagination / parameterized filter support.
 
 ### 6.4 EmployeeDirectory (HR) — DISC-006 / D-023
 - Authoritative source (Paylocity / Workday / local) — **unconfirmed**.
@@ -317,6 +324,16 @@ a vendor package or a `simulator/**` type (PP-016 isolation).
 - SMTP relay address + sender identity; SPF/DKIM requirements.
 - Recipient lists per event (configurable in R2).
 - Bounce/undeliverable handling.
+
+### 6.8 RatesSource (Access billing DB) — DISC-018 🔴 / D-017, D-035
+- **Rates live in the Access DB, not T-Sheets (D-017).** T-Sheets = hours only.
+- Rate schema: trade/discipline → role-level, incl. OT rates (DISC-018).
+- **How a rate keys to a sub-code / labor category** — the join for labor
+  charge calc (PP-023, PP-026).
+- **Read path to on-prem Access (D-035 🔴):** low-volume; a cached snapshot
+  refreshed on a schedule is the leading model. Not solvable by the sim.
+- In dev/CI, rates are seeded from `labor-classifications.json` +
+  `billing-examples.json` so the charge calc is exercised end-to-end.
 
 ## 7. Switching Simulator ↔ Real Adapter
 

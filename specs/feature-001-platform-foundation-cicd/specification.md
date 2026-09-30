@@ -96,7 +96,7 @@ The following are **out of scope** for 001 and belong to the listed features:
 |---|---|
 | Login UI, session management, RBAC enforcement, role matrix (D-009), MFA flow UI, user admin UI, security-event logging (PP-070) | Feature 002 |
 | Sim adapters for Timekeeping/Procurement/Employee/Document/AR/Notification; their fixtures; full contract suite | Feature 007 |
-| Real (non-sim) adapters for any port (Entra OIDC, T-Sheets, Dataverse, …) | Features 007–010 (gated D-033) |
+| Real (non-sim) adapters for any port (Entra OIDC, T-Sheets, on-prem SQL/Access, …) | Features 007–010 (gated D-033) |
 | Any domain tables (SOW, Budget, roles table, audit table, …) | Feature 002+ (audit table with 002/006) |
 | SOW form, state machine, packet assembly, billing, closeout, AR delivery, migration, reporting | Features 004–016 |
 | Master data (customers, departments, project types, …) | Feature 003 |

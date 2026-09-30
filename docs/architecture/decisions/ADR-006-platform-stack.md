@@ -159,9 +159,9 @@ ice_demo/
 
 > **Key distinction:** the development default runs entirely on simulators +
 > SQLite. The production approach uses real adapters (Entra ID, T-Sheets,
-> Dataverse, etc.) + the IT-confirmed database. The application code is
-> identical in both; only the config switch and database connection string /
-> EF Core provider change.
+> on-prem SQL/Access, etc.) + the IT-confirmed database. The application code
+> is identical in both; only the config switch and database connection string
+> / EF Core provider change.
 
 ## 6. Relationship to Existing Artifacts
 

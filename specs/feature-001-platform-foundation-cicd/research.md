@@ -1,7 +1,7 @@
 # Feature 001 — Research & Assumptions
 
 > Short research note. Feature 001 is scaffolding; the heavy research
-> (T-Sheets API, Dataverse surface, HR source) belongs to DISC-001/003/006
+> (T-Sheets API, on-prem SQL/Access surface, HR source) belongs to DISC-001/003/006/018
 > and Features 008/010/007 respectively. This file records only the
 > tooling choices and assumptions that 001 itself must make.
 > Stack baseline: **C# / .NET 10 LTS** (ADR-006).

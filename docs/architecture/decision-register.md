@@ -29,7 +29,8 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 | D-029 | Release controls & deployment gates | **Decided for development** | IT | R1 | 001 | **DECIDED FOR DEVELOPMENT (ADR-004).** GitHub Actions; branch protection + PR review + tag-based release + manual PROD approval gate; CI gate = lint/typecheck/unit/contract/integration/architecture(PP-016)+frontend build. Rationale + IT-confirmation in `decisions/ADR-004-ci-cd-and-release-controls.md`. |
 | D-030 | Audit & security log retention + export format | Open | IT | R1 | 002 | ICE policy retention period; CSV export; SIEM requirement (register silent on SIEM). |
 | D-031 | Staffing & timeline | **Decided for development** | PM | R1 | — | **DECIDED FOR DEVELOPMENT (ADR-005).** Two-track, relative, input-gated delivery: Ralph (AI) primary implementer; client/ICE input track is the critical path (DISC-001→008, DISC-012→015→R1 exit). Relative timeline — calendar dates attach only when ICE commits input dates. Not a code blocker. See `decisions/ADR-005-delivery-model.md`. |
-| D-033 | Real-system verification & credentials | Open | IT/VENDOR | R1 | 007–010 | When do real sandbox creds (T-Sheets, Dataverse, HR, AR location) arrive? Gates real-adapter verification. |
+| D-033 | Real-system verification & credentials | Open | IT/VENDOR | R1 | 007–010 | When do real sandbox creds (T-Sheets, on-prem SQL Server, HR, AR location) arrive? Gates real-adapter verification. No full demo env expected before build start — development proceeds on simulators (synthetic-data-strategy.md) and real adapters are verified when creds arrive. |
+| D-035 | On-prem data connectivity (SQL + Access) | **Open 🔴** | IT | R1 | 008, 010, 015 | How does the app reach **on-prem** data with no public API — the Procurement **SQL Server** (PO read) and the **Access billing DB** (rates/billing, D-017)? Decide the read path: on-prem data gateway (Azure Data Gateway / self-hosted integration runtime), app co-located on-prem, linked server / read replica, or scheduled extract into the primary DB. Also the SQL/Access auth model. **Not solvable by the sim fallback** — gates the real `ProcurementService` adapter and the rates read. Record choice before building real adapters. |
 | D-034 | Message broker for R2 GL sync | Deferred | PM/IT | R2 | — | Revisit if PP-054 introduces async volume. Not in R1. |
 
 ## 2. Identity, Security & Users
@@ -52,7 +53,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 | D-006 | Requester identity model | Open | PM | R1 | 004 | Is Requester an internal user or external party (PP-005)? Affects IdentityProvider use. |
 | D-013 | Full state machine transition matrix + hold-resume semantics | Proposed | PM/OPA | R1 | 006, 013 | Register fixes the 8 statuses (PP-017) but not all transitions. Proposed matrix in workflow-map §1. Confirm hold-release state and post-billing edit interplay. |
 | D-014 | Variance threshold values (flags) | Open | OPA | R1 | 011, 012 | What % / amount triggers amber/red (PP-018, PP-026). |
-| D-017 | Rate source for billing charges | Open | OPA | R1 | 009, 012 | Budget rate vs actual rate for labor charge calc (PP-023, PP-026, PP-035 rates). |
+| D-017 | Rate source for billing charges | **Decided for development** | OPA | R1 | 009, 012 | **RATES COME FROM THE ACCESS BILLING DB / RATES MASTER, NOT T-SHEETS** (confirmed 2026-09-30: T-Sheets = hours only). Billing rates per trade/discipline → role-level incl. OT rates read from the Access DB (D-035 connectivity). Budget rates are a separate thing (budgeted estimate); actual labor charge calc (PP-023, PP-026) uses the Access rate source. DISC-007 reconciles the labor-category master; DISC-012 captures the rate schema. |
 | D-019 | Relevance filter defaults (packet) | Open | OPA | R1 | 012 | Which document types/data sections are included per type/client (PP-028). |
 | D-021 | Notification recipients & channel for R1 minimum events | Proposed | OPA/PM | R1 | 002, 013 | R1 minimum (PP-069, PP-052): in-app task + email to configured Ops Accounting. Recommend that default. |
 
@@ -73,7 +74,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 
 | ID | Decision | Status | Owner | Rel | Blocks | Notes / Recommendation |
 |---|---|---|---|---|---|---|
-| D-018 | PO↔SOW matching convention | Open | PM/IT | R1 | 010, 012 | Confirm which field carries SOW/job number (PP-024, PP-038). See DISC-003. |
+| D-018 | PO↔SOW matching convention | Open | PM/IT | R1 | 010, 012 | Procurement backend is **on-prem SQL Server** (not Dataverse) — matching field confirmed against the SQL PO table (PP-024, PP-038). See DISC-003; connectivity model in D-035. |
 | D-016 | OM code billing treatment | Open | OPA | R1 | 011 | How OM codes are billed (PP-019). Recommend: not customer-billed; time/cost allocation only. |
 
 ## 7. Billing, Closeout & AR
@@ -125,9 +126,9 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 | 002 Identity & Access | D-009 (RBAC matrix detail), D-027, D-028, D-022 |
 | 003 Master Data | D-003, D-004, D-005, D-006, D-016, D-023 |
 | 006 Lifecycle | D-013, D-014 |
-| 008 T-Sheets | D-010, D-011 (after DISC-001 spike) |
+| 008 T-Sheets | D-010, D-011 (after DISC-001 spike), D-035 (on-prem connectivity for rates read) |
 | 009/012 Labor & Packet | D-017, D-019, D-012 (R1 min only) |
-| 010/013 Procurement & Closeout | D-018, D-020, D-021, D-025 |
+| 010/013 Procurement & Closeout | D-018, D-020, D-021, D-025, D-035 (on-prem SQL connectivity) |
 | 016 Reporting | D-014, D-015, D-026 |
 | 017+ (R2) | D-008, D-012, D-024 |
 | 022 (R3) | D-032 |
@@ -136,6 +137,7 @@ FIN (Finance/FP&A), EXE (Executive), VENDOR (T-Sheets/procurement/HR vendor).
 | ID | Waiting on | Impact |
 |---|---|---|
 | D-010 | DISC-001 spike / T-Sheets vendor | Feature 008 design |
+| D-035 | ICE IT — on-prem SQL + Access read path | Real `ProcurementService` adapter + rates read |
 | D-033 | IT/vendor sandbox creds | Real-adapter verification (007–010) |
 
 ## 11. Explicitly NOT decided (carried as open, per "do not silently resolve")

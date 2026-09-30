@@ -49,10 +49,14 @@ flowchart TB
         DOC[DocumentStore port\nPP-006/046]
     end
 
+    subgraph ExtSrc["External data sources (read-only, on-prem)"]
+        ACC[(Access billing DB\nrates + billing history\nD-017 / DISC-012)]
+    end
+
     subgraph Ext["External systems (all via ports)"]
         IDP[IdentityProvider\nEntra ID PP-049/050]
         TK[TimekeepingService\nT-Sheets PP-010..014/039]
-        PROC[ProcurementService\nPower App/Dataverse PP-038]
+        PROC[ProcurementService\nPower App/on-prem SQL PP-038]
         EMP[EmployeeDirectory\nHR source PP-053]
         AR[ARHandoffService\nAR delivery PP-029/040]
     end
@@ -230,7 +234,7 @@ TimesheetEntry    { employeeId, subCodeRef, date, startTs?, endTs?, hours, sourc
   (OT determination depends on it); rate limits; sandbox credentials;
   deactivation semantics on reopen (D-011).
 
-### 5.3 ProcurementService (Power App / Dataverse) (PP-038)
+### 5.3 ProcurementService (Power App / on-prem SQL) (PP-038)
 
 ```
 interface ProcurementService {
@@ -245,18 +249,21 @@ interface ProcurementService {
 PO { poNumber, status, vendor, lines[POLine], sowNumber?, projectIdentifier?, totalCost }
 ```
 
-- **Real adapter:** Dataverse OData/Web API (assumed; DISC-003 to confirm
-  stable API surface and the PO↔SOW matching field).
+- **Real adapter:** read path against the **on-prem SQL Server** that backs
+  the Procurement Power App (confirmed: not Dataverse). No public API — the
+  app reads SQL directly (DISC-003 to confirm schema, the PO↔SOW matching
+  field, and the connectivity model — see §8.3 and D-035).
 - **Simulator:** `SimProcurementService` — seeded POs/receipts/vendors from
   `fixtures/procurement/`; includes an intentional "unmatched PO" fixture to
   exercise the exception path in PP-026.
 - **Contract tests:** filter by SOW number returns only matching POs;
   unmatched records return with `sowNumber = null` (not dropped); PO status
   enum stable; error mapping.
-- **Config:** `procurement.provider = dataverse | sim`.
+- **Config:** `procurement.provider = sql | sim`.
 - **Unresolved:** which departments are on the Power App; which field carries
-  the SOW/job number (DISC-003, D-018); auth model for OData (service
-  principal vs delegated) — see §8.3.
+  the SOW/job number (DISC-003, D-018); how the app reaches an on-prem SQL
+  Server (connectivity model — D-035); auth model for the SQL read (SQL auth
+  vs service principal) — see §8.3.
 
 ### 5.4 DocumentStore (PP-006, PP-046)
 
@@ -428,7 +435,7 @@ variables, or `.env`), per environment:
   "environment": "dev | test | prod",
   "identity":     { "provider": "entra | sim", "tenant": "…" },
   "timekeeping":  { "provider": "tsheets | sim", "baseUrl": "…", "apiVersion": "…" },
-  "procurement":  { "provider": "dataverse | sim", "endpoint": "…", "environment": "…" },
+  "procurement":  { "provider": "sql | sim", "dataSource": "…", "schema": "…" },
   "employee":     { "provider": "hr | sim", "source": "…" },
   "documents":    { "provider": "blob | sharepoint | sim", "container": "…" },
   "arhandoff":    { "provider": "folder | portal | email | sim", "target": "…" },
@@ -460,6 +467,11 @@ subject (managed via the PP-051 admin UI); MFA = **Entra Conditional Access**
 matrix), D-027 (session timeout), D-028 (MFA method) remain open values.
 
 ### 8.2 T-Sheets — unconfirmed capabilities (DISC-001)
+> **Rates are NOT a T-Sheets source (D-017).** T-Sheets is confirmed as the
+> **hours** source only. Billing rates (per trade/role/level, OT rates) come
+> from the **Access billing DB / rates master** (see §8.6). Do not attempt to
+> read rates from the T-Sheets API.
+
 | Capability | Status | Impact if unavailable |
 |---|---|---|
 | Job create via API | likely OK (confirm in spike) | manual job creation + ID entry (degraded) |
@@ -469,12 +481,22 @@ matrix), D-027 (session timeout), D-028 (MFA method) remain open values.
 | Activate/deactivate job | likely OK | manual deactivation + reminder task |
 | Error semantics / rate limits | unknown | retry/backoff policy (DISC-001) |
 
-### 8.3 Procurement Power App / Dataverse — unconfirmed (DISC-003)
-- Assume OData Web API on Dataverse; confirm stable entity set + field names.
+### 8.3 Procurement Power App / on-prem SQL — unconfirmed (DISC-003)
+- **Backend confirmed on-prem SQL Server** (not Dataverse): the Power App
+  reads/writes a local SQL DB. There is no cloud OData API; the real adapter
+  is a SQL read path.
+- **Connectivity (D-035 🔴):** the app must reach an on-prem SQL Server with
+  no public endpoint. Options to decide: on-prem data gateway (e.g. Azure Data
+  Gateway / self-hosted integration runtime), app co-located on-prem, linked
+  server / read replica, or scheduled extract into the primary DB. Record the
+  choice + auth model as a decision before the real adapter is built.
+- **Schema (DISC-003):** confirm the PO table/fields and the field carrying
+  the SOW/job number for matching.
 - **Matching:** PO must carry SOW number or project identifier — confirm
   which; if absent, fall back to CSV import of approved POs (release-plan
   contingency).
-- Auth: service principal (app-only) recommended; confirm with IT.
+- Auth: SQL authentication (contained/service principal) recommended; confirm
+  with IT.
 
 ### 8.4 HR source — unconfirmed (DISC-006)
 Any of Paylocity/Workday/local. Port + simulator mean the choice is deferred;
@@ -483,6 +505,21 @@ operational path.
 
 ### 8.5 AR handoff — unconfirmed (D-020, DISC-013)
 R1 default: shared-folder deposit. Same port supports portal/email.
+
+### 8.6 Access billing DB (rates + billing history) — on-prem, no API
+The client's billing data and **rates live in an Access database** (on-prem).
+This is a live read source, not only a migration artifact:
+- **Rates (D-017):** the source of billing rates per trade/discipline →
+  role-level, including OT rates. The billing packet and labor charge calc
+  (PP-023, PP-026) read rates from here, **not** from T-Sheets or the budget.
+- **Billing history (DISC-012 / D-004):** also carries SOW history + the
+  SOW-number sequence for migration/continuity.
+- **Read path:** same on-prem connectivity concern as §8.3 (D-035). The rate
+  read is low-volume (rates rarely change) — a cached snapshot refreshed on a
+  schedule is a viable model pending D-035.
+- **Discovery:** DISC-012 to capture the Access schema (rate tables, how a
+  rate links to trade/role/level and sub-code); DISC-007 to reconcile the
+  labor-category master against this rates source.
 
 ## 9. Security Architecture (PP-041, PP-049–052, PP-070)
 

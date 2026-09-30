@@ -414,7 +414,10 @@ labor section of the billing packet.
 - AC-5: The labor section is part of the packet review workspace (PP-026) and
   regeneratable if data changes before approval.
 
-**Open:** rate source for billing charges → D-017.
+**Decided (D-017, 2026-09-30):** the rate source for billing charges is the
+**Access billing DB / rates master** (trade/discipline → role-level, incl. OT
+rates) — **not T-Sheets** (T-Sheets is hours-only) and not the budget.
+Open: exact rate schema + the on-prem read path → DISC-018, D-035.
 
 #### PP-024 — Auto-Assemble Packet — Materials / POs (R1, P1, ⚠️)
 The system shall retrieve approved POs, received materials, stock issues, and
@@ -432,7 +435,8 @@ section.
   dropped.
 
 **Open:** which departments are fully on the Procurement Power App; PO↔SOW
-matching convention → DISC-003, D-018.
+matching convention (against the on-prem SQL PO table); on-prem SQL
+connectivity model → DISC-003, D-018, D-035.
 
 #### PP-025 — Auto-Assemble Packet — Equipment (R2, P2, ⚠️)
 The system shall retrieve equipment charges and stock-issue reports associated
@@ -684,23 +688,25 @@ required closeout documents.
 
 ### 3.6 Epic 6 — Integrations
 
-#### PP-038 — Procurement Power App / Dataverse Read (R1, P1, ⚠️)
+#### PP-038 — Procurement Power App / on-prem SQL Read (R1, P1, ⚠️)
 The system shall read PO headers/lines, received goods, stock issues, vendor
-info, and cost data from the Procurement Power App, filtered by SOW number or
-mapped project identifier.
+info, and cost data from the Procurement Power App (backed by an **on-prem
+SQL Server**, not Dataverse), filtered by SOW number or mapped project
+identifier.
 
 **Acceptance criteria**
 - AC-1: All reads go through the `ProcurementService` port.
 - AC-2: Query surface: PO headers/lines, received goods, stock issues, vendor
   info, cost data; filter by SOW number or mapped project identifier.
-- AC-3: Read-only in Phase 1 (no writes to Dataverse).
+- AC-3: Read-only in Phase 1 (no writes to the on-prem SQL Server).
 - AC-4: Unmatched/ambiguous records surface as review exceptions (PP-026),
   never silently included.
 - AC-5: Simulator adapter available with synthetic fixtures (see
   `docs/data/synthetic-data-strategy.md`).
 
-**Open:** stable API/OData exposure; PO records carrying SOW/job number →
-DISC-003, D-018.
+**Open:** the SQL PO table/fields; PO records carrying SOW/job number (D-018);
+**how the app reaches the on-prem SQL Server** (connectivity model — D-035 🔴)
+→ DISC-003.
 
 #### PP-039 — T-Sheets Bidirectional Integration (R1, P1, ✅)
 The system shall integrate with T-Sheets for job/sub-code creation, employee

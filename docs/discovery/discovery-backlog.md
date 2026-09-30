@@ -19,18 +19,19 @@
 
 | ID | Item | Pri | Rel | Exit question | Output |
 |---|---|---|---|---|---|
-| DISC-001 | **T-Sheets sandbox spike (PP-047 🔴)** — validate job create, sub-code create, employee assignment/restriction, time-entry start/end timestamps, activate/deactivate, error semantics & rate limits | 🔴 | Pre-R1 | Can we create sub-codes + restrict employees via API? Do time entries carry timestamps? What are the error/rate behaviors? | Spike report → feeds D-010; gates Feature 008. **Critical path — start first.** |
+| DISC-001 | **T-Sheets sandbox spike (PP-047 🔴)** — validate job create, sub-code create, employee assignment/restriction, time-entry start/end timestamps, activate/deactivate, error semantics & rate limits | 🔴 | Pre-R1 | Can we create sub-codes + restrict employees via API? Do time entries carry timestamps? What are the error/rate behaviors? Are rates retrievable via the API? (expected: **no** — rates come from the Access billing DB, D-017; confirm T-Sheets is hours-only) | Spike report → feeds D-010; gates Feature 008. **Critical path — start first.** |
 | DISC-002 | **Pre-job obligations checklist (PP-007)** — enumerate the obligations per project type (Hard Dollar/T&M/OMR/Camp) and which are mandatory vs waivable | ⚠️ | R1 | What are the concrete pre-job obligations for each project type, and who validates them? | Checklist content → D-003; seeds Feature 004/006 config. |
-| DISC-003 | **Procurement Power App / Dataverse API (PP-038, PP-024)** — confirm stable OData/Web API surface, entity/field names, and the field that carries the SOW/job number for PO matching; which departments are fully on the Power App | ⚠️ | R1 | Which entity/field links a PO to an SOW? Is the API stable and service-principal-able? | API contract + matching field → D-018; real `ProcurementService` adapter. |
+| DISC-003 | **Procurement Power App / on-prem SQL (PP-038, PP-024)** — backend confirmed on-prem SQL Server (not Dataverse). Confirm the PO table + fields, the field that carries the SOW/job number for PO matching, and how the app reaches the on-prem SQL | ⚠️ | R1 | Which SQL table/field links a PO to an SOW? What is the read path to an on-prem SQL Server (gateway / co-located / extract)? Is the SQL read service-principal-able? | Schema + matching field + connectivity model → D-018, D-035; real `ProcurementService` adapter. |
 | DISC-004 | **Equipment / stock-issue source (PP-025)** — identify the system of record for equipment charges and stock-issue reports | ⚠️ | R2 | Where do equipment/stock-issue records live, and can we read them? | Source + read path → new `EquipmentService` port design (R2). |
 | DISC-005 | **Overtime rules list (PP-015, PP-036)** — obtain the structured OT rules from the client (defaults, project-type & client overrides, after-hours rates, special thresholds) | ⚠️ | R1/R2 | What are the exact OT rules, in machine-readable form, for the R1 minimum and the full R2 set? | Rules spec → D-012; R1 minimum rule + R2 engine. |
 | DISC-006 | **HR / employee source (PP-053, PP-034)** — confirm the authoritative employee/department source (Paylocity / Workday / local) and its read API | ⚠️ | R1 | Which system is the employee + department system of record, and how do we read it? | Source + read path → real `EmployeeDirectory` adapter; feeds D-023. |
-| DISC-007 | **Labor category master (PP-035)** — obtain the full two-level trade/discipline → role-level list from rates/bid sheets | ⚠️ | R1 | What is the complete labor classification list to seed the master? | Seed data → Feature 003. |
+| DISC-007 | **Labor category master (PP-035)** — obtain the full two-level trade/discipline → role-level list, reconciled against the **Access billing DB rates master** (rates live here, not T-Sheets — D-017) | ⚠️ | R1 | What is the complete labor classification list, and how does each trade/role/level map to its rate in the Access DB? | Seed data + rate mapping → Feature 003; feeds D-017. |
 | DISC-008 | **OM code list + treatment (PP-019)** — obtain the OM code list and confirm billing treatment | ○ | R1 | What OM codes exist and how are they billed (or not)? | Seed data + billing rule → D-016; Feature 003. |
 | DISC-009 | **Change order design (PP-020)** — confirm CO as first-class record vs budget edit, and the approval workflow | ⚠️ | R2 | Is a CO a standalone record with its own budget delta + approval, or a budget edit? | Design → D-008; Feature 017. |
 | DISC-010 | **Progress billing rules (PP-021)** — determine whether/when the progress-billing *workflow* rules exist (data tracking is R2; workflow deferred until rules) | ○ | R2 | Are progress-billing rules defined? If not, R2 delivers data tracking only. | Scope decision → Feature 017 scope. |
 | DISC-011 | **Accrual workbook/formula (PP-032, PP-072)** — obtain Shannon's accrual workbook/formula and reconcile it to system data (incl. the project financial / accrual-support report fields) | ⚠️ | R3 | What exact formula/data produces the monthly accrual and the project financial / accrual-support reports, so the system can reproduce them? | Formula + report spec → D-032; Feature 022. |
 | DISC-012 | **Migration source inventory (PP-044 🔴, PP-001, PP-033)** — obtain Access DB, Excel logs, customer master file, SharePoint job list + doc refs; map schemas and the SOW-number sequence | 🔴 | R1 | What are the exact source schemas, record counts, and the current max SOW number for sequence continuity? | Mapping spec + sequence → D-004, D-025; Feature 015. |
+| DISC-018 | **Access billing DB — rate & billing schema (D-017 🔴)** — capture the Access DB structure: rate tables (trade/discipline → role-level, incl. OT rates), how a rate links to a sub-code/labor category, and the billing-history tables | 🔴 | R1 | What exactly is the rate schema, how does a rate key to trade/role/level, and what billing-history tables exist? | Rate/billing schema spec → D-017 (rates source), D-035 (read path); feeds Features 009/012/015. |
 | DISC-013 | **AR handoff mechanism (PP-029, PP-040)** — confirm the AR delivery mechanism (folder/portal/email/S2S), location, naming, and any read-back | ⚠️ | R1 | How exactly does AR receive a packet, and do they confirm receipt? | Mechanism + convention → D-020; real `ARHandoffService` adapter. |
 | DISC-014 | **GL / accounting interface (PP-054)** — confirm the interface mechanism for billing identifiers, invoice numbers, payment status | ⚠️ | R2 | What is the GL/AR interface, and what can we write back in R2? | Interface spec → D-024; `GLService` port (R2). |
 | DISC-015 | **Sizing & SLA (PP-045)** — confirm expected user count, concurrent-use profile, largest SOW size, and availability SLA | ⚠️ | R1 | How many users, what concurrency, how big a SOW, what SLA? | Targets → D-026; architecture §10. |
@@ -44,13 +45,16 @@ flowchart LR
     D1[DISC-001 T-Sheets spike 🔴] --> D010[D-010] --> F008[Feature 008]
     D12[DISC-012 migration 🔴] --> D004[D-004] --> D025[D-025] --> F015[Feature 015]
     D2[DISC-002 pre-job checklist] --> D003[D-003] --> F004[Feature 004]
-    D3[DISC-003 procurement] --> D018[D-018] --> F010[Feature 010]
+    D3[DISC-003 procurement on-prem SQL] --> D018[D-018] --> F010[Feature 010]
     D5[DISC-005 OT rules] --> D012[D-012] --> F018[Feature 018 R2]
     D6[DISC-006 HR source] --> D023[D-023] --> F007[Feature 007]
     D13[DISC-013 AR mech] --> D020[D-020] --> F014[Feature 014]
     D15[DISC-015 sizing] --> D026[D-026] --> F016[Feature 016]
     D7[DISC-007 labor cat] --> F003[Feature 003]
     D8[DISC-008 OM codes] --> D016[D-016] --> F011[Feature 011]
+    D18[DISC-018 Access rate schema 🔴] --> D017[D-017 rates source] --> F009[Feature 009/012]
+    D18 --> D035[D-035 on-prem read path]
+    D3 --> D035
 ```
 
 ## 3. Critical-Path Discovery (start immediately, do not wait for Feature 001)
