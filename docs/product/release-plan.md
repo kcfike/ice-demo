@@ -32,7 +32,59 @@ gantt
 (ADR-005):** the delivery model is two-track, relative, and input-gated —
 Ralph (AI) is the primary implementer and the client/ICE input track is the
 critical path. Calendar dates attach only when ICE commits input dates (the
-DISC-001 and DISC-012 spikes). See `docs/architecture/decisions/ADR-005-delivery-model.md`.)*
+>(the DISC-001 and DISC-012 spikes). See `docs/architecture/decisions/ADR-005-delivery-model.md`.)*
+
+### Draft Delivery Timeline (from R1 hours estimate)
+
+> **Draft (2026-09-29).** Source: `ICE_Services_SDD_Project_Hours_Estimate.xlsx`
+> (R1 AI-first estimate — 502–556 human hours, 10–13 week planning calendar,
+> overlapping workstreams). Weeks are relative to kickoff, per ADR-005: no
+> calendar dates until ICE commits input dates (DISC-001, DISC-012, D-033).
+> The 10-week low case assumes gating inputs land in their scheduled weeks;
+> each slip of a 🟥 gate shifts everything downstream of it.
+
+```mermaid
+gantt
+    title Draft R1 delivery timeline (13-week case; compresses to 10 if client inputs land on time)
+    dateFormat X
+    axisFormat W%s
+    section Platform
+    API spikes (40h) + input gates (DISC-001/003/012)   :crit, p1, 0, 1
+    001 Foundation (8h) / 002 Identity (12h)            :p2, 0, 2
+    003 Master Data (6h) / 004 SOW Core (8h)            :p3, 2, 2
+    005 Documents (10h) / 006 Lifecycle (10h) / 007 Ports & Sims :p4, 4, 2
+    section Core build
+    008 T-Sheets Provisioning (20h) — DISC-001 gated    :crit, c1, 6, 2
+    010 Procurement & Costs (20h) — DISC-003 gated      :c2, 6, 2
+    009 Labor Retrieval + OT (16h) / 011 Fin Tracking (8h) :c3, 8, 2
+    012 Billing Packet Assembly (14h)                   :c4, 10, 1
+    013 Closeout (14h) / 014 AR Handoff (10h) / 016 Reports :c5, 11, 2
+    section Cutover & hardening
+    015 Migration & cutover (20h) — DISC-012 gated      :crit, m1, 7, 4
+    UAT prep/support (50h) + test review (40–50h)       :m2, 10, 3
+    Release readiness, training, hypercare (38h)        :m3, 12, 1
+```
+
+| Weeks | Workstream | Feature hours (estimate) |
+|---|---|---|
+| 1 | Kickoff; API spikes (T-Sheets, Procurement, HR, AR); 001 Platform & CI/CD | spikes 40h, 001 8h |
+| 1–2 | 002 Identity & Access | 12h |
+| 2–4 | 003 Master Data ‖ 004 SOW Core Setup | 6h + 8h |
+| 4–6 | 005 Documents ‖ 006 Lifecycle & Audit; 007 Ports & Simulators | 10h + 10h |
+| 6–8 | 008 T-Sheets Provisioning (🟥 DISC-001) ‖ 010 Procurement (🟥 DISC-003) | 20h + 20h |
+| 8–10 | 009 Labor Retrieval + basic OT; 011 Financial Tracking | 16h + 8h |
+| 10–11 | 012 Billing Packet Assembly | 14h |
+| 11–13 | 013 Closeout ‖ 014 AR Handoff; 016 R1 reporting slice | 14h + 10h |
+| 7–11 | 015 Data Migration & cutover (🟥 DISC-012 customer master), parallel to core build | 20h |
+| 10–13 | UAT preparation/support; system-wide automated test review | 50h + 40–50h |
+| 13 | Release readiness, training, cutover sign-off, hypercare | ~38h |
+
+**Reading the draft:** feature implementation hours sum to 184h of the
+502–556h total; the remainder is program-level work (BMAD/UX/architecture
+packages, Spec Kit preparation, Claude Code oversight, external-system
+validation, UAT, migration validation, training, coordination) that is
+interleaved, not sequential. Per ADR-005 §3.7, the timeline re-baselines at
+the point each 🟥 gate (DISC-001, DISC-012, D-033 credentials) resolves.
 
 ## 2. R1 — Core SOW Lifecycle (49 requirements)
 
