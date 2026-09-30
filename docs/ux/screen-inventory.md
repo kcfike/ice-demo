@@ -5,6 +5,7 @@
 | Status | BMAD draft v1.0 (2026-09-26) |
 | Scope | R1 screens (R2/R3 marked as extensions) |
 | Companion | `docs/ux/ux-spec.md`, `docs/ux/workflow-map.md` |
+| Concept mockups | `docs/ux/wireframes/` (draft concepts for S-30, S-40–S-46, S-72) |
 
 Status: **R1** = required for release 1; **R2** = release 2; **R3** = release 3.
 

@@ -124,31 +124,75 @@ App shell
 - Every audit-eligible field shows a "last changed by / when" tooltip on hover.
 - True-up adjustments show adjuster, reason, and amount inline.
 
-## 5. Screen-Level Specifications (R1)
+## 5. Visual Concept Mockups (draft, 2026-09-29)
+
+Three high-fidelity concept screens were produced and are stored in
+`docs/ux/wireframes/`. They are consistent with this spec's substance; where
+they introduce a pattern, that pattern is captured in §6 below.
+
+| Mockup | Screen | Maps to | Notes |
+|---|---|---|---|
+| `wireframes/concept-01-sow-detail.png` | SOW detail — Overview | S-30 | Introduces the status stepper, condensed Recent Activity feed and Assigned Employees panel (§6.1) |
+| `wireframes/concept-02-billing-reconciliation.png` | Billing & Closeout — Reconciliation | S-40–S-46 | Matches the §6.5 workspace; adds a "Notes" tab (new, not in S-40–S-49) |
+| `wireframes/concept-03-portfolio-dashboard.png` | Project Portfolio dashboard | S-72 (PP-048) | **R2 scope** — shown for reference only; not an R1 screen |
+
+**Open items to reconcile before the concepts are canonical:**
+- **Status vocabulary:** concept-01's header chip reads "In Progress" and the
+  stepper shows 5 states, but §2 defines 8 statuses and "Active" is the
+  canonical label. The stepper and chip must be re-based onto the §2 set.
+- **Sidebar IA:** the three concepts each use a different sidebar
+  (Projects/My Work/Time · Home/SOWs/Planning/Execution · Dashboard/Billing/
+  Reports). §3's navigation tree is the single source of truth; the mockups
+  must converge on it rather than the spec adopting three variants.
+- **Draft data artifacts:** the two SOW concepts disagree on customer
+  (Riverside vs Riverton) and budget ($420k vs $2.48M), and concept-03 is
+  dated 2025 while the SOWs are 2026. Tidy before treating as canonical.
+
+## 6. Screen-Level Specifications (R1)
 
 > Full inventory in `docs/ux/screen-inventory.md`; flows in
 > `docs/ux/workflow-map.md`. Key screens with behavior notes:
 
-### 5.1 SOW Detail — Budget tab
+### 6.1 SOW Detail — Overview & status stepper (S-30)
+- **Status stepper (header):** horizontal progress rail showing the SOW's
+  lifecycle position, with dated milestones under each completed step. The
+  concept shows a 5-step happy path (Draft → Approved → Active → Ready to Bill
+  → Closed). The §2 status set is the authoritative model — every §2 status
+  (including On Hold, Billing in Review, Approved for AR, Invoiced) must map
+  to a defined position on the rail. Dates come from the SOW activity log
+  (PP-022). The header status chip label must use §2 vocabulary ("Active",
+  not "In Progress").
+- **Condensed Recent Activity feed:** last ~5 activity events (date, type,
+  description, actor) with a "View All" link to the full History tab (S-36,
+  PP-022). The History tab remains the complete chronological log; the feed is
+  the hub-level summary (principle 2 — one page of truth).
+- **Assigned Employees panel:** name, role, allocation %, status, with an
+  "Add" action. Data from T-Sheets provisioning (PP-010/PP-012) / HR source.
+- **Budget snapshot cards:** Approved Budget / Actual Cost / Remaining with
+  % of budget — a read-only summary linking into the Budget tab (S-31, PP-018).
+- **Missing-data chips:** e.g. "Customer PO ⚠ Missing" on required fields —
+  surfaced inline on the hub per principle 4 / §4.6.
+
+### 6.2 SOW Detail — Budget tab
 - State-dependent editability (D-009): Draft = full edit; Active = restricted
   fields; post-Ready-for-Billing = read-only (corrections via adjustment
   records in R2, PP-055).
 - Variance panel (budget vs actual) per category with drill-down for labor
   (by discipline) — PP-018.
 
-### 5.2 SOW Detail — Documents tab
+### 6.3 SOW Detail — Documents tab
 - Upload with mandatory document type (from closeout register types).
 - Closeout readiness strip: "3 of 5 required documents present" with missing
   list (PP-068) — this strip is also on the Billing tab.
 - Download single / all; preview inline for PDF/Office where supported.
 
-### 5.3 Ops Accounting Queue
+### 6.4 Ops Accounting Queue
 - Columns: SOW, customer, project type, stage (Ready for Billing / In Review /
   On Hold / Approved), age, variance flag, missing docs count.
 - Row action: "Open review" → reconciliation workspace.
 - Age thresholds highlight (closeout age per PP-069; hold age per PP-030).
 
-### 5.4 Reconciliation Workspace (PP-026) — the core R1 screen
+### 6.5 Reconciliation Workspace (PP-026) — the core R1 screen
 Layout (single screen, tabbed sections):
 1. **Summary** — budget vs actual by category, totals, variance flags.
 2. **Labor** — by discipline/role: budgeted hours/rate, actual hours, ST/OT
@@ -165,30 +209,30 @@ Layout (single screen, tabbed sections):
 - "Generate preview PDF" available before approval (PP-028) so layout issues
   are caught pre-approval.
 
-### 5.5 AR Handoff view (PP-029, PP-040)
+### 6.6 AR Handoff view (PP-029, PP-040)
 - Packet bundle contents list (PDF + documents), delivery mechanism (D-020),
   delivery status (queued/sent/failed), timestamp, user.
 - Retry on failure; handoff log (append-only) shown below.
 
-### 5.6 Master Data screens
+### 6.7 Master Data screens
 - Generic CRUD shell (list + form) per entity; validation per PRD.
 - Project Type configuration screen: the five dimensions (billing model, OT
   rule set, packet format, required budget categories, required closeout docs)
   as one coherent form per type — this is where PP-037 + PP-068 config lives.
 
-### 5.7 Integration status (Administration)
+### 6.8 Integration status (Administration)
 - Per adapter: real/simulator mode, last health check, last call success/fail,
   open errors, "switch mode" (admin action, config change per
   `docs/architecture/architecture.md` §Configuration).
 - Critical for support while R1 runs on simulators.
 
-### 5.8 Audit explorer & Security events (Administration)
+### 6.9 Audit explorer & Security events (Administration)
 - Filter: entity, user, date range, event class; export to CSV (PP-042,
   PP-070).
 - Read-only; no delete; row detail shows old/new values (audit) or session
   data (security).
 
-## 6. Accessibility & Usability Targets
+## 7. Accessibility & Usability Targets
 
 - WCAG 2.1 AA: contrast, keyboard navigation, focus order, screen-reader
   labels on all interactive elements.
@@ -197,7 +241,7 @@ Layout (single screen, tabbed sections):
 - Target: a trained user completes SOW creation (intake → activation) in
   under 10 minutes without help (measure in dry-run, PP-045 adjacent).
 
-## 7. R2/R3 UX Extension Points (noted, not designed here)
+## 8. R2/R3 UX Extension Points (noted, not designed here)
 
 - OT rules admin screen (PP-036) — new Master Data entity.
 - Change order screens (PP-020) — CO list, CO detail with delta + approval.
