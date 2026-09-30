@@ -42,27 +42,31 @@ critical path. Calendar dates attach only when ICE commits input dates (the
 > calendar dates until ICE commits input dates (DISC-001, DISC-012, D-033).
 > The 10-week low case assumes gating inputs land in their scheduled weeks;
 > each slip of a 🟥 gate shifts everything downstream of it.
+>
+> The Gantt below anchors W1 to a hypothetical kickoff Monday (2026-10-05)
+> purely so the bars render in sequence; the real calendar remains TBD per
+> ADR-005, and week offsets (W0–W13) are what the plan commits to.
 
 ```mermaid
 gantt
     title Draft R1 delivery timeline (13-week case; compresses to 10 if client inputs land on time)
-    dateFormat X
-    axisFormat W%s
+    dateFormat YYYY-MM-DD
+    axisFormat %m-%d
     section Platform
-    API spikes (40h) + input gates (DISC-001/003/012)   :crit, p1, 0, 1
-    001 Foundation (8h) / 002 Identity (12h)            :p2, 0, 2
-    003 Master Data (6h) / 004 SOW Core (8h)            :p3, 2, 2
-    005 Documents (10h) / 006 Lifecycle (10h) / 007 Ports & Sims :p4, 4, 2
+    API spikes (40h) + input gates (DISC-001/003/012)   :crit, p1, 2026-10-05, 1w
+    001 Foundation (8h) / 002 Identity (12h)            :p2, 2026-10-05, 2w
+    003 Master Data (6h) / 004 SOW Core (8h)            :p3, 2026-10-19, 2w
+    005 Documents (10h) / 006 Lifecycle (10h) / 007 Ports & Sims :p4, 2026-11-02, 2w
     section Core build
-    008 T-Sheets Provisioning (20h) — DISC-001 gated    :crit, c1, 6, 2
-    010 Procurement & Costs (20h) — DISC-003 gated      :c2, 6, 2
-    009 Labor Retrieval + OT (16h) / 011 Fin Tracking (8h) :c3, 8, 2
-    012 Billing Packet Assembly (14h)                   :c4, 10, 1
-    013 Closeout (14h) / 014 AR Handoff (10h) / 016 Reports :c5, 11, 2
+    008 T-Sheets Provisioning (20h) — DISC-001 gated    :crit, c1, 2026-11-16, 2w
+    010 Procurement & Costs (20h) — DISC-003 gated      :c2, 2026-11-16, 2w
+    009 Labor Retrieval + OT (16h) / 011 Fin Tracking (8h) :c3, 2026-11-30, 2w
+    012 Billing Packet Assembly (14h)                   :c4, 2026-12-14, 1w
+    013 Closeout (14h) / 014 AR Handoff (10h) / 016 Reports :c5, 2026-12-21, 2w
     section Cutover & hardening
-    015 Migration & cutover (20h) — DISC-012 gated      :crit, m1, 7, 4
-    UAT prep/support (50h) + test review (40–50h)       :m2, 10, 3
-    Release readiness, training, hypercare (38h)        :m3, 12, 1
+    015 Migration & cutover (20h) — DISC-012 gated      :crit, m1, 2026-11-23, 4w
+    UAT prep/support (50h) + test review (40–50h)       :m2, 2026-12-14, 3w
+    Release readiness, training, hypercare (38h)        :m3, 2026-12-28, 1w
 ```
 
 | Weeks | Workstream | Feature hours (estimate) |
