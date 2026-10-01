@@ -323,7 +323,7 @@ All test runs deterministic and offline (no network in CI; sim only).
 | D-007 identity mechanism (001 scaffolds only) | **DECIDED FOR DEVELOPMENT** (ADR-003) |
 | D-031 delivery model | **DECIDED FOR DEVELOPMENT** (ADR-005) |
 | GitHub remote | Exists: `https://github.com/kcfike/ice-demo.git` |
-| Local toolchain | .NET SDK 9.0.313 (note: .NET 10 SDK not yet installed locally — see §13 A1), Node 22.17.1 / npm 10.9.2 ✓ |
+| Local toolchain | .NET SDK 10.0.401 (LTS) verified locally (9.0.313 also present), Node 22.17.1 / npm 10.9.2 ✓ |
 
 ### 12.2 Open confirmations — **NOT requirements**
 
@@ -395,10 +395,11 @@ choice above stays *Pending* until ICE IT explicitly confirms it (ADR-006 §7).
 **Assumptions (adopted in this spec, flagged for sign-off):**
 
 1. **A1 — .NET 10 SDK availability.** The baseline targets .NET 10 LTS
-   (ADR-006 §2). The local environment currently has .NET SDK 9.0.313 only.
-   Ralph must install the .NET 10 SDK before building (or CI must use the
-   .NET 10 SDK). This is an environment prerequisite, not an architectural
-   choice. *Flag for sign-off.*
+   (ADR-006 §2). The local environment now has .NET SDK **10.0.401** verified
+   (`dotnet --list-sdks` reports 9.0.313 and 10.0.401), so the install
+   prerequisite is satisfied. `global.json` still pins `10.x` for dev + CI
+   parity. This was an environment prerequisite, not an architectural choice;
+   it is now confirmed locally.
 2. **A2 (Issue 1) — 001/007 simulator split** per §4: 001 ships identity sim
    + facade + contract-test model; 007 ships the other 7 sims + full suite.
    This reconciles ADR-006 §4.1 with feature-sequence §5 finding 6.

@@ -93,7 +93,7 @@ A task is *done* only when 1–4 hold. No task may leave the tree red.
 | R8 | EF Core baseline diverges from later migrations | Low | Pin versions via `Directory.Packages.props`; N8 verifies up/down on a temp SQLite file |
 | R9 | Ralph implements 007 sim adapters early | Medium | Non-goals table + N5 acceptance criteria name the 7 excluded adapters explicitly |
 | R10 | `.gitignore` misses `sim-state/` → runtime state committed | Low | N1 adds `bin/ obj/ sim-state/ *.db`; N15 scans the tree |
-| R11 | .NET 10 SDK not installed locally (9.0.313 present) | Medium | Assumption A1 (specification §13): install the .NET 10 SDK before building, or CI uses `actions/setup-dotnet@v4` 10.x |
+| R11 | .NET 10 SDK install prerequisite | Low | Satisfied — .NET SDK 10.0.401 verified locally (specification §13 A1); CI still pins 10.x via `global.json` for dev+CI parity (`actions/setup-dotnet@v4` 10.x) |
 
 ## 5. Exit criteria for Feature 001 (feature-level "done")
 

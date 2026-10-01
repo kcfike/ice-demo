@@ -10,7 +10,7 @@
 
 | Tool | Version floor | Why |
 |---|---|---|
-| .NET SDK | 10.x (LTS) | ADR-006 §2; `global.json` pins 10.x for dev + CI parity (A1: local env currently has 9.0.313 only) |
+| .NET SDK | 10.x (LTS) | ADR-006 §2; `global.json` pins 10.x for dev + CI parity; local env verified with .NET SDK 10.0.401 (9.0.313 also present) |
 | ASP.NET Core | net10.0 (framework reference) | ADR-006 §2 (DI, config, logging, health checks) |
 | Entity Framework Core | ≥ 10.0 (incl. `Microsoft.EntityFrameworkCore.Sqlite`) | ADR-006 §2; **A3** — EF Core's built-in migration tooling (`dotnet ef`) is the migration companion |
 | xUnit | current (incl. `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`) | ADR-006 §2 (unit, contract, integration) |
@@ -42,7 +42,7 @@ Azure DevOps is a workflow-porting exercise, not a redesign.
 | ID | Assumption | Source / evidence | Risk if wrong |
 |---|---|---|---|
 | A1 | 001/007 simulator split (identity sim in 001, other 7 in 007) | specification §4 reconciling ADR-006 §4.1 with feature-sequence §5#6 | 007 spec must restate; no code rework if split holds |
-| A2 | C# projects live **under `src/`**; .NET 10 SDK (local env has 9.0.313 — install 10.x or rely on CI) | ADR-006 §3 (repo structure); specification §13 A1 | Trivial rename/TFM change if reversed |
+| A2 | C# projects live **under `src/`**; .NET 10 SDK (local env verified with 10.0.401 — install prerequisite satisfied) | ADR-006 §3 (repo structure); specification §13 A1 | Trivial rename/TFM change if reversed |
 | A3 | EF Core `dotnet ef` for migrations | ADR-006 §2 (Entity Framework Core); no ADR names a tool | Swap tool; 001 baseline migration re-generated |
 | A4 | Deploy jobs ship **disabled/placeholder** | ADR-004 §5.1 (targets IT-provisioned, D-033) | Enable jobs when IT provisions; logic unchanged |
 | A5 | 001 has **no domain tables** | specification §5 non-goals; traceability row 001 | 002 adds first tables |

@@ -373,7 +373,7 @@ Provider selection is **per-adapter, per-environment**.
   "environment": "dev",
   "identity":      { "provider": "sim", "tenant": "" },
   "timekeeping":   { "provider": "sim", "baseUrl": "", "apiVersion": "" },
-  "procurement":   { "provider": "sim", "endpoint": "", "environment": "" },
+  "procurement":   { "provider": "sim", "dataSource": "", "schema": "" },
   "employee":      { "provider": "sim", "source": "" },
   "documents":     { "provider": "sim", "container": "" },
   "arhandoff":     { "provider": "sim", "target": "" },
